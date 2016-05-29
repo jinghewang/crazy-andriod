@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">HelloWorld</string>
+    <string name="btn_click">点击我</string>
+    <string name="action_settings">设置</string>
+    <string name="action_connect">连接</string>
+    <string name="action_disconnect">断开</string>
+    <string name="action_disabled">禁用</string>
+    <string name="action_click">点击</string>
+    <string name="action_help">帮助</string>
+    <string name="toast">你点击了这个</string>
+</resources>
