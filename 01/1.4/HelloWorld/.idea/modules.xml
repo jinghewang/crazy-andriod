@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/HelloWorld.iml" filepath="$PROJECT_DIR$/HelloWorld.iml" />
+      <module fileurl="file://$USER_HOME$/Documents/crazy-andriod/01/1.4/HelloWorld/HelloWorld.iml" filepath="$USER_HOME$/Documents/crazy-andriod/01/1.4/HelloWorld/HelloWorld.iml" />
       <module fileurl="file://$USER_HOME$/Documents/crazy-andriod/01/1.4/HelloWorld/app/app.iml" filepath="$USER_HOME$/Documents/crazy-andriod/01/1.4/HelloWorld/app/app.iml" />
     </modules>
   </component>
