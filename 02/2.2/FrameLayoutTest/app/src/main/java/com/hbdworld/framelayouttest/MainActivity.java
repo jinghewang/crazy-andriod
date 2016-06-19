@@ -42,10 +42,9 @@ public class MainActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             if (msg.what == 0x123) {
                 for (int i = 0; i < names.length; i++) {
-                    //textViews[i].setText(i);
-
-                    //Toast.makeText(this,"ddd",0).show();
-                    //textViews[i].setBackgroundColor(colors[(i + currentColor) % names.length]);
+                    Log.w("-----ss------", String.valueOf(i)); //输出错误消息
+                    int ii = (i + currentColor) % names.length;
+                    textViews[i].setBackgroundResource(colors[ii]);
                     //Log.println(1,"ddd","dds");
                 }
                 currentColor++;
@@ -59,14 +58,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //-
-        for (int i=0 ;i< names.length ;i++){
-            textViews[i] = (TextView)this.findViewById(names[i]);
+        for (int i = 0; i < names.length; i++) {
+            textViews[i] = (TextView) this.findViewById(names[i]);
         }
-//        new Timer().schedule(new TimerTask() {
-//            @Override
-//            public void run() {
-//                handler.sendEmptyMessage(0x123);
-//            }
-//        },200,1000);
+
+        //--
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                handler.sendEmptyMessage(0x123);
+            }
+        }, 200, 500);
     }
 }
