@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MixView</string>
+    <string name="image_click">点击切换图片</string>
 </resources>
