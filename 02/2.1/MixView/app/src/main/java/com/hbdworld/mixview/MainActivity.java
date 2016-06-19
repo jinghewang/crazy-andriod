@@ -25,20 +25,27 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         LinearLayout main = (LinearLayout) this.findViewById(R.id.root);
+        final ImageView imageView = new ImageView(this);
         Button button = new Button(this);
+        //button
         button.setText(R.string.image_click);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                imageView.callOnClick();
+            }
+        });
         main.addView(button);
 
-        final ImageView imageView = new ImageView(this);
+        //imageView
         imageView.setImageResource(images[0]);
-        main.addView(imageView);
-
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 imageView.setImageResource(images[++currentImage % images.length]);
             }
         });
+        main.addView(imageView);
 
     }
 }
