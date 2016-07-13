@@ -5,16 +5,19 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_column="4"
-    android:layout_row="6">
+    android:columnCount="4"
+    android:rowCount="6">
 
     <TextView
+        android:id="@+id/result"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_columnSpan="4"
         android:background="#eee"
         android:textColor="#000"
         android:layout_gravity="right"
+        android:textSize="50sp"
+        android:padding="3pt"
         android:text="0" />
 
 
