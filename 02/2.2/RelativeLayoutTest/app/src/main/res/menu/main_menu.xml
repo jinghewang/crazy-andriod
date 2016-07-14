@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
+        <item
+            android:id="@+id/settings_first"
+            android:orderInCategory="100"
+            android:title="@string/settings_first" />
+        <item
+            android:id="@+id/settings_net"
+            android:orderInCategory="300"
+            android:title="@string/settings_net" />
+        <item
+            android:id="@+id/settings_user"
+            android:orderInCategory="200"
+            android:title="@string/settings_user" />
+        <item
+            android:id="@+id/settings_conn"
+            android:orderInCategory="400"
+            android:title="@string/settings_conn" />
+        <item
+            android:id="@+id/settings_data"
+            android:orderInCategory="500"
+            android:title="@string/settings_data" />
+</menu>
