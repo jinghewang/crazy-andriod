@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">ButtonTest</string>
+    <string name="app_set">设置</string>
+    <string name="app_set2">设置2</string>
+    <string name="app_set3">设置3</string>
+</resources>

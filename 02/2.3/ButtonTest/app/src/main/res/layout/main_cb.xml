@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+
+	<TableRow>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical"
+			android:text="性别" />
+
+		<RadioGroup
+			android:id="@+id/rg"
+			android:orientation="horizontal">
+			<RadioButton
+				android:id="@+id/female"
+				android:text="男"
+				android:checked="true"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content" />
+
+			<RadioButton
+				android:id="@+id/male"
+				android:text="女"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content" />
+
+		</RadioGroup>
+
+	</TableRow>
+
+	<TableRow>
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical"
+			android:text="颜色" />
+
+		<LinearLayout android:orientation="vertical">
+
+			<CheckBox
+				android:text="蓝色"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content" />
+			<CheckBox
+				android:text="红色"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content" />
+			<CheckBox
+				android:text="紫色"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content" />
+		</LinearLayout>
+	</TableRow>
+
+	<Button android:id="@+id/show" android:text="显示" />
+
+</TableLayout>
