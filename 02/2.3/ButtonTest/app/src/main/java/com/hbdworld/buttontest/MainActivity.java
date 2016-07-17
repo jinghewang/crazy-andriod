@@ -17,45 +17,11 @@ public class MainActivity extends AppCompatActivity {
     TextView show = null;
     Button start = null;
     Button stop = null;
-    Chronometer ch = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_ch);
-
-        start = (Button) this.findViewById(R.id.start);
-        stop = (Button) this.findViewById(R.id.stop);
-        ch = (Chronometer)this.findViewById(R.id.ch);
-
-        stop.setEnabled(false);
-
-        start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ch.setBase(SystemClock.elapsedRealtime());
-                ch.start();
-                start.setEnabled(false);
-                stop.setEnabled(true);
-            }
-        });
-
-        stop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ch.stop();
-                start.setEnabled(true);
-                stop.setEnabled(false);
-            }
-        });
-
-        ch.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
-            @Override
-            public void onChronometerTick(Chronometer chronometer) {
-                long t = (SystemClock.elapsedRealtime() -  chronometer.getBase())/1000;
-                Toast.makeText(MainActivity.this, Long.toString(t) ,Toast.LENGTH_SHORT).show();
-            }
-        });
+        setContentView(R.layout.activity_main);
 
     }
 
