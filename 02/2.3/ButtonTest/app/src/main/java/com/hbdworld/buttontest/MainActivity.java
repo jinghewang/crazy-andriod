@@ -1,30 +1,62 @@
 package com.hbdworld.buttontest;
 
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
     TextView show = null;
+    Button start = null;
+    Button stop = null;
+    Chronometer ch = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_cb);
+        setContentView(R.layout.main_ch);
 
-        show = (TextView)this.findViewById(R.id.show);
-        RadioGroup rg = (RadioGroup)this.findViewById(R.id.rg);
-        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        start = (Button) this.findViewById(R.id.start);
+        stop = (Button) this.findViewById(R.id.stop);
+        ch = (Chronometer)this.findViewById(R.id.ch);
+
+        stop.setEnabled(false);
+
+        start.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                String text = checkedId == R.id.female?"男":"女";
-                show.setText(text);
+            public void onClick(View view) {
+                ch.setBase(SystemClock.elapsedRealtime());
+                ch.start();
+                start.setEnabled(false);
+                stop.setEnabled(true);
             }
         });
+
+        stop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ch.stop();
+                start.setEnabled(true);
+                stop.setEnabled(false);
+            }
+        });
+
+        ch.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
+            @Override
+            public void onChronometerTick(Chronometer chronometer) {
+                long t = (SystemClock.elapsedRealtime() -  chronometer.getBase())/1000;
+                Toast.makeText(MainActivity.this, Long.toString(t) ,Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     @Override
