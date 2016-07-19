@@ -6,24 +6,45 @@
     android:orientation="vertical"
     tools:context="com.hbdworld.buttontest.MainActivity">
 
-
-    <Chronometer
+    <ToggleButton
+        android:id="@+id/tb"
+        android:text="开关"
+        android:textOn="横向布局"
+        android:textOff="纵身布局"
+        android:checked="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/ch"
-        android:layout_gravity="center_horizontal" />
+        android:layout_height="wrap_content" />
 
-    <Button
+    <Switch
+        android:id="@+id/sw"
+        android:textOn="横向布局"
+        android:textOff="纵身布局"
+        android:checked="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="start"
-        android:id="@+id/start"
-        android:layout_gravity="center_horizontal" />
+        android:layout_height="wrap_content" />
 
-    <Button
+
+    <LinearLayout
+        android:id="@+id/layout"
+        android:orientation="horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="stop"
-        android:id="@+id/stop"
-        android:layout_gravity="center_horizontal" />
+        android:layout_height="wrap_content">
+
+        <Button
+            android:text="按钮1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:text="按钮2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:text="按钮3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
 </LinearLayout>
