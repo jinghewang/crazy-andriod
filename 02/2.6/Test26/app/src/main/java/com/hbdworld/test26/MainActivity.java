@@ -7,12 +7,13 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
+import android.widget.SeekBar;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    RatingBar ratingBar ;
     ImageView imageView;
+    SeekBar seekBar;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -21,12 +22,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //--
-        ratingBar = (RatingBar)this.findViewById(R.id.ratingBar);
+        SeekBar seekBar = (SeekBar) findViewById(R.id.seekBar);
         imageView = (ImageView)this.findViewById(R.id.imageView);
-        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+        imageView.setImageResource(R.drawable.lijiang);
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                Toast.makeText(MainActivity.this,String.valueOf(rating),Toast.LENGTH_SHORT).show();
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                imageView.setAlpha(i);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
             }
         });
     }
