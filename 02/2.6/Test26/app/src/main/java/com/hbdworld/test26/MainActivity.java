@@ -1,5 +1,7 @@
 package com.hbdworld.test26;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
@@ -17,6 +19,8 @@ import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.SeekBar;
 import android.widget.SimpleAdapter;
+import android.widget.TextSwitcher;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
@@ -35,9 +39,19 @@ public class MainActivity extends AppCompatActivity {
                     , R.drawable.bomb14, R.drawable.bomb15, R.drawable.bomb16
             };
 
-    ImageSwitcher imageSwitcher;
+
+    String[] strs = new String[]
+            {
+                    "疯狂Java讲义",
+                    "轻量级Java EE企业应用实战",
+                    "疯狂Android讲义",
+                    "疯狂Ajax讲义"
+            };
+
+    TextSwitcher textSwitcher;
     GridView gridView;
 
+    int curStr = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -46,40 +60,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //--
-        imageSwitcher = (ImageSwitcher)this.findViewById(R.id.imageSwitcher);
-        imageSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
+        textSwitcher = (TextSwitcher)this.findViewById(R.id.textSwitcher);
+        textSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
             @Override
             public View makeView() {
-                ImageView image = new ImageView(MainActivity.this);
-                image.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                image.setLayoutParams(new ImageSwitcher.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                return image;
+                TextView textView = new TextView(MainActivity.this);
+                textView.setTextColor(Color.BLUE);
+                return textView;
             }
         });
 
-        gridView = (GridView)this.findViewById(R.id.gridView);
-        List<Map<String, Object>> items = getMapList();
-        SimpleAdapter simpleAdapter = new SimpleAdapter(this,items,R.layout.cell,new String[]{"image"},new int[]{R.id.imageView});
-        gridView.setAdapter(simpleAdapter);
+       next(null);
+    }
 
-        gridView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                imageSwitcher.setImageResource(imageIds[i]);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                imageSwitcher.setImageResource(imageIds[i]);
-            }
-        });
+    // 事件处理函数，控制显示下一个字符串
+    public void next(View source)
+    {
+        textSwitcher.setText(strs[curStr++ % strs.length]);  // ①
     }
 
     @NonNull
