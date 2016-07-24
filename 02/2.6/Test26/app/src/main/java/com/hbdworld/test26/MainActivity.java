@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
         //--
         viewFlipper = (ViewFlipper)this.findViewById(R.id.viewFlipper);
+        //viewFlipper.addView();
 
     }
 
