@@ -22,6 +22,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 import android.widget.ViewSwitcher;
 
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
                     "疯狂Ajax讲义"
             };
 
-    TextSwitcher textSwitcher;
+    ViewFlipper viewFlipper;
     GridView gridView;
 
     int curStr = 0;
@@ -60,23 +61,26 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //--
-        textSwitcher = (TextSwitcher)this.findViewById(R.id.textSwitcher);
-        textSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
-            @Override
-            public View makeView() {
-                TextView textView = new TextView(MainActivity.this);
-                textView.setTextColor(Color.BLUE);
-                return textView;
-            }
-        });
+        viewFlipper = (ViewFlipper)this.findViewById(R.id.viewFlipper);
 
-       next(null);
     }
 
-    // 事件处理函数，控制显示下一个字符串
     public void next(View source)
     {
-        textSwitcher.setText(strs[curStr++ % strs.length]);  // ①
+        viewFlipper.setAutoStart(false);
+        viewFlipper.showNext();
+    }
+
+    public void prev(View source)
+    {
+        viewFlipper.setAutoStart(false);
+        viewFlipper.showPrevious();
+    }
+
+    public void auto(View source)
+    {
+        viewFlipper.setAutoStart(true);
+        viewFlipper.startFlipping();
     }
 
     @NonNull
