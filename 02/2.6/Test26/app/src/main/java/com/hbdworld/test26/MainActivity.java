@@ -2,6 +2,7 @@ package com.hbdworld.test26;
 
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -57,12 +58,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         gridView = (GridView)this.findViewById(R.id.gridView);
-        List<Map<String,Object>> items = new ArrayList<>();
-        for (int i = 0; i < imageIds.length; i++) {
-            Map<String,Object> item = new HashMap<>();
-            item.put("image",imageIds[i]);
-            items.add(item);
-        }
+        List<Map<String, Object>> items = getMapList();
         SimpleAdapter simpleAdapter = new SimpleAdapter(this,items,R.layout.cell,new String[]{"image"},new int[]{R.id.imageView});
         gridView.setAdapter(simpleAdapter);
 
@@ -84,5 +80,16 @@ public class MainActivity extends AppCompatActivity {
                 imageSwitcher.setImageResource(imageIds[i]);
             }
         });
+    }
+
+    @NonNull
+    private List<Map<String, Object>> getMapList() {
+        List<Map<String,Object>> items = new ArrayList<>();
+        for (int i = 0; i < imageIds.length; i++) {
+            Map<String,Object> item = new HashMap<>();
+            item.put("image",imageIds[i]);
+            items.add(item);
+        }
+        return items;
     }
 }
