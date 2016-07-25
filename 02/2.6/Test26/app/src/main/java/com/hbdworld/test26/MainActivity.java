@@ -13,6 +13,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.DatePicker;
 import android.widget.GridView;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
@@ -22,11 +23,13 @@ import android.widget.SeekBar;
 import android.widget.SimpleAdapter;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 import android.widget.ViewSwitcher;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,7 +56,11 @@ public class MainActivity extends AppCompatActivity {
     CalendarView calendarView;
     GridView gridView;
 
-    int curStr = 0;
+    private int year;
+    private int month;
+    private int day;
+    private int hour;
+    private int minute;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -62,16 +69,43 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //--
-        calendarView = (CalendarView)this.findViewById(R.id.calendarView);
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+        Calendar c = Calendar.getInstance();
+        DatePicker datePicker = (DatePicker) findViewById(R.id.datePicker);
+        TimePicker timePicker = (TimePicker) findViewById(R.id.timePicker);
+
+        year = c.get(Calendar.YEAR);
+        month = c.get(Calendar.MONTH);
+        day = c.get(Calendar.DAY_OF_MONTH);
+        hour = c.get(Calendar.HOUR);
+        minute = c.get(Calendar.MINUTE);
+        // 初始化DatePicker组件，初始化时指定监听器
+        datePicker.init(year, month, day, new DatePicker.OnDateChangedListener()
+        {
             @Override
-            public void onSelectedDayChange(CalendarView calendarView, int i, int i1, int i2) {
-                Toast.makeText(MainActivity.this,"你生日是" + i + "年" + i1 + "月"
-                                + i2 + "日",
-                        Toast.LENGTH_SHORT).show();
+            public void onDateChanged(DatePicker arg0, int year
+                    , int month, int day)
+            {
+                MainActivity.this.year = year;
+                MainActivity.this.month = month;
+                MainActivity.this.day = day;
+                // 显示当前日期、时间
+                //showDate(year, month, day, hour, minute);
+            }
+        });
+        timePicker.setEnabled(true);
+
+        timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+            @Override
+            public void onTimeChanged(TimePicker timePicker, int i, int i1) {
+                String msg = String.valueOf(i) + "时" + String.valueOf(i1) + "分";
+                showToast(msg);
             }
         });
 
+    }
+
+    private void showToast(String msg) {
+        Toast.makeText(MainActivity.this,msg,Toast.LENGTH_LONG).show();
     }
 
     @NonNull
