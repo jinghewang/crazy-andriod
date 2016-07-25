@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.GridView;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                     "疯狂Ajax讲义"
             };
 
-    ViewFlipper viewFlipper;
+    CalendarView calendarView;
     GridView gridView;
 
     int curStr = 0;
@@ -61,27 +62,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //--
-        viewFlipper = (ViewFlipper)this.findViewById(R.id.viewFlipper);
-        //viewFlipper.addView();
+        calendarView = (CalendarView)this.findViewById(R.id.calendarView);
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(CalendarView calendarView, int i, int i1, int i2) {
+                Toast.makeText(MainActivity.this,"你生日是" + i + "年" + i1 + "月"
+                                + i2 + "日",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
 
-    }
-
-    public void next(View source)
-    {
-        viewFlipper.setAutoStart(false);
-        viewFlipper.showNext();
-    }
-
-    public void prev(View source)
-    {
-        viewFlipper.setAutoStart(false);
-        viewFlipper.showPrevious();
-    }
-
-    public void auto(View source)
-    {
-        viewFlipper.setAutoStart(true);
-        viewFlipper.startFlipping();
     }
 
     @NonNull
