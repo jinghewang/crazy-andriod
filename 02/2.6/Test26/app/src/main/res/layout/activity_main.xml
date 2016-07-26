@@ -1,27 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
-    <NumberPicker
+    <HorizontalScrollView
         android:layout_width="wrap_content"
-        android:layout_height="80dp"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:id="@+id/numberPicker" />
+        android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/send"
-        android:text="发送Notification"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    <Button
-        android:id="@+id/cancel"
-        android:text="取消Notification"
-        android:layout_gravity="right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="滚动视图滚动视图滚动视图滚动视图"
+                android:textSize="30dp" />
 
-</LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="滚动视图滚动视图滚动视图滚动视图"
+                android:textSize="30dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="滚动视图滚动视图滚动视图滚动视图"
+                android:textSize="30dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="滚动视图滚动视图滚动视图滚动视图"
+                android:textSize="30dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="滚动视图滚动视图滚动视图滚动视图"
+                android:textSize="30dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="滚动视图滚动视图滚动视图滚动视图"
+                android:textSize="30dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="滚动视图滚动视图滚动视图滚动视图"
+                android:textSize="30dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="滚动视图滚动视图滚动视图滚动视图"
+                android:textSize="30dp" />
+
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
+</ScrollView>
+

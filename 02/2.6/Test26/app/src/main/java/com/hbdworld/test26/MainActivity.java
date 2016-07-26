@@ -73,24 +73,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //--
-        np1 = (NumberPicker) findViewById(R.id.numberPicker);
-        // 设置np1的最小值和最大值
-        np1.setMinValue(10);
-        np1.setMaxValue(50);
-        // 设置np1的当前值
-        np1.setValue(minPrice);
-        np1.setOnValueChangedListener(new NumberPicker.OnValueChangeListener()
-        {
-            // 当NumberPicker的值发生改变时，将会激发该方法
-            @Override
-            public void onValueChange(NumberPicker picker,
-                                      int oldVal, int newVal)
-            {
-                minPrice = newVal;
-                showToast(String.valueOf(oldVal));
-            }
-        });
+
     }
 
 
@@ -98,11 +81,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         Button btn = (Button)view;
         switch (btn.getId()){
-            case R.id.send:
-                break;
 
-            case R.id.cancel:
-                break;
 
             default:
                 break;
