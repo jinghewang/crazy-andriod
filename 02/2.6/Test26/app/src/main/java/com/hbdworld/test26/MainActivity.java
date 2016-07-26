@@ -46,7 +46,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity {
 
     int[] imageIds = new int[]
             {
@@ -67,6 +67,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     SearchView sv;
     ListView lv;
+    private final String[] mStrings = { "aaaaa", "bbbbbb", "cccccc" };
+
 
 
     @Override
@@ -76,9 +78,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         //--
-        lv = (ListView)this.findViewById(R.id.listView);
+        lv = (ListView) findViewById(R.id.listView);
+        lv.setAdapter(new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, mStrings));
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                int id2 = view.getId();
+            }
+        });
+        // 设置ListView启用过滤
         lv.setTextFilterEnabled(true);
-        lv.setAdapter(new ArrayAdapter<String>(this,R.layout.support_simple_spinner_dropdown_item,new String[]{"aa","bb","cc","ab"}));
 
         sv = (android.widget.SearchView)this.findViewById(R.id.searchView);
         sv.setSubmitButtonEnabled(true);
@@ -102,18 +112,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return true;
             }
         });
-    }
-
-
-    @Override
-    public void onClick(View view) {
-        Button btn = (Button)view;
-        switch (btn.getId()){
-
-
-            default:
-                break;
-        }
     }
 
 
