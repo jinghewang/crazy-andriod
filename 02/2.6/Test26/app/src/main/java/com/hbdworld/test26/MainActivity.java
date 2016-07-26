@@ -1,9 +1,15 @@
 package com.hbdworld.test26;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -34,7 +40,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     int[] imageIds = new int[]
             {
@@ -53,14 +59,9 @@ public class MainActivity extends AppCompatActivity {
                     "疯狂Ajax讲义"
             };
 
-    CalendarView calendarView;
-    GridView gridView;
+    NotificationManager nm;
+    static final int NOTIFICATION_ID = 0x123;
 
-    private int year;
-    private int month;
-    private int day;
-    private int hour;
-    private int minute;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -68,45 +69,45 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //--
-        Calendar c = Calendar.getInstance();
-        DatePicker datePicker = (DatePicker) findViewById(R.id.datePicker);
-        TimePicker timePicker = (TimePicker) findViewById(R.id.timePicker);
-
-        year = c.get(Calendar.YEAR);
-        month = c.get(Calendar.MONTH);
-        day = c.get(Calendar.DAY_OF_MONTH);
-        hour = c.get(Calendar.HOUR);
-        minute = c.get(Calendar.MINUTE);
-        // 初始化DatePicker组件，初始化时指定监听器
-        datePicker.init(year, month, day, new DatePicker.OnDateChangedListener()
-        {
-            @Override
-            public void onDateChanged(DatePicker arg0, int year
-                    , int month, int day)
-            {
-                MainActivity.this.year = year;
-                MainActivity.this.month = month;
-                MainActivity.this.day = day;
-                // 显示当前日期、时间
-                //showDate(year, month, day, hour, minute);
-            }
-        });
-        timePicker.setEnabled(true);
-
-        timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
-            @Override
-            public void onTimeChanged(TimePicker timePicker, int i, int i1) {
-                String msg = String.valueOf(i) + "时" + String.valueOf(i1) + "分";
-                showToast(msg);
-            }
-        });
-
+        //user
+        nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        Button send = (Button)this.findViewById(R.id.send);
+        Button cancel = (Button)this.findViewById(R.id.cancel);
+        send.setOnClickListener(this);
+        cancel.setOnClickListener(this);
     }
 
-    private void showToast(String msg) {
-        Toast.makeText(MainActivity.this,msg,Toast.LENGTH_LONG).show();
+
+    @Override
+    public void onClick(View view) {
+        Button btn = (Button)view;
+        Intent intent = new Intent(MainActivity.this,OtherActivity.class);
+        PendingIntent pi =  PendingIntent.getActivity(MainActivity.this, 0, intent, 0);
+        switch (btn.getId()){
+            case R.id.send:
+                Notification notify = new Notification.Builder(this)
+                        .setAutoCancel(true)
+                        .setTicker("你有新的消息123")
+                        .setSmallIcon(R.drawable.notify)
+                        .setContentTitle("一条新通知")
+                        .setContentText("恭喜你，您加薪了，工资增加20%!")
+                        .setSound(Uri.parse("android.resource://com.hbdworld.test26/" + R.raw.msg))
+                        .setWhen(System.currentTimeMillis())
+                        .setContentIntent(pi)
+                        .build();
+
+                nm.notify(NOTIFICATION_ID,notify);
+                break;
+
+            case R.id.cancel:
+                nm.cancel(NOTIFICATION_ID);
+                break;
+
+            default:
+                break;
+        }
     }
+
 
     @NonNull
     private List<Map<String, Object>> getMapList() {

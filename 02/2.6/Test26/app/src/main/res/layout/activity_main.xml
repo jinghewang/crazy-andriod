@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <DatePicker android:id="@+id/datePicker"
+
+    <Button
+        android:id="@+id/send"
+        android:text="发送Notification"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:startYear="2000"
-        android:endYear="2016"
-        android:calendarViewShown="true"
-        android:spinnersShown="true"/>
-    <!-- 定义一个TimePicker组件 -->
-    <TimePicker android:id="@+id/timePicker"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/cancel"
+        android:text="取消Notification"
+        android:layout_gravity="right"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
