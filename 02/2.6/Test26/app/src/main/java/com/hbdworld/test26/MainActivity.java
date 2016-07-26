@@ -1,5 +1,7 @@
 package com.hbdworld.test26;
 
+import android.text.TextUtils;
+import android.widget.SearchView;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -17,12 +19,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.GridView;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
@@ -60,11 +65,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     "疯狂Ajax讲义"
             };
 
-    NotificationManager nm;
-    static final int NOTIFICATION_ID = 0x123;
-    NumberPicker np1, np2;
-    // 定义最低价格、最高价格的初始值
-    int minPrice = 25, maxPrice = 75;
+    SearchView sv;
+    ListView lv;
 
 
     @Override
@@ -73,7 +75,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //--
+        lv = (ListView)this.findViewById(R.id.listView);
+        lv.setTextFilterEnabled(true);
+        lv.setAdapter(new ArrayAdapter<String>(this,R.layout.support_simple_spinner_dropdown_item,new String[]{"aa","bb","cc","ab"}));
 
+        sv = (android.widget.SearchView)this.findViewById(R.id.searchView);
+        sv.setSubmitButtonEnabled(true);
+        sv.setIconifiedByDefault(false);
+        sv.setQueryHint("查找");
+        sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                showToast(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (TextUtils.isEmpty(newText)){
+                    lv.clearTextFilter();
+                }
+                else{
+                    lv.setFilterText(newText);
+                }
+                return true;
+            }
+        });
     }
 
 
@@ -91,8 +119,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void showToast(String msg)
     {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT)
-                .show();
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
     @NonNull
