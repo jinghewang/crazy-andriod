@@ -23,6 +23,7 @@ import android.widget.DatePicker;
 import android.widget.GridView;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
+import android.widget.NumberPicker;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.SeekBar;
@@ -61,6 +62,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     NotificationManager nm;
     static final int NOTIFICATION_ID = 0x123;
+    NumberPicker np1, np2;
+    // 定义最低价格、最高价格的初始值
+    int minPrice = 25, maxPrice = 75;
 
 
     @Override
@@ -69,38 +73,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //user
-        nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        Button send = (Button)this.findViewById(R.id.send);
-        Button cancel = (Button)this.findViewById(R.id.cancel);
-        send.setOnClickListener(this);
-        cancel.setOnClickListener(this);
+        //--
+        np1 = (NumberPicker) findViewById(R.id.numberPicker);
+        // 设置np1的最小值和最大值
+        np1.setMinValue(10);
+        np1.setMaxValue(50);
+        // 设置np1的当前值
+        np1.setValue(minPrice);
+        np1.setOnValueChangedListener(new NumberPicker.OnValueChangeListener()
+        {
+            // 当NumberPicker的值发生改变时，将会激发该方法
+            @Override
+            public void onValueChange(NumberPicker picker,
+                                      int oldVal, int newVal)
+            {
+                minPrice = newVal;
+                showToast(String.valueOf(oldVal));
+            }
+        });
     }
 
 
     @Override
     public void onClick(View view) {
         Button btn = (Button)view;
-        Intent intent = new Intent(MainActivity.this,OtherActivity.class);
-        PendingIntent pi =  PendingIntent.getActivity(MainActivity.this, 0, intent, 0);
         switch (btn.getId()){
             case R.id.send:
-                Notification notify = new Notification.Builder(this)
-                        .setAutoCancel(true)
-                        .setTicker("你有新的消息123")
-                        .setSmallIcon(R.drawable.notify)
-                        .setContentTitle("一条新通知")
-                        .setContentText("恭喜你，您加薪了，工资增加20%!")
-                        .setSound(Uri.parse("android.resource://com.hbdworld.test26/" + R.raw.msg))
-                        .setWhen(System.currentTimeMillis())
-                        .setContentIntent(pi)
-                        .build();
-
-                nm.notify(NOTIFICATION_ID,notify);
                 break;
 
             case R.id.cancel:
-                nm.cancel(NOTIFICATION_ID);
                 break;
 
             default:
@@ -108,6 +109,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+
+    private void showToast(String msg)
+    {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT)
+                .show();
+    }
 
     @NonNull
     private List<Map<String, Object>> getMapList() {
