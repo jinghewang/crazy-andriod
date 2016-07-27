@@ -1,5 +1,6 @@
 package com.hbdworld.test26;
 
+import android.app.TabActivity;
 import android.text.TextUtils;
 import android.widget.SearchView;
 import android.app.Notification;
@@ -33,6 +34,7 @@ import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.SeekBar;
 import android.widget.SimpleAdapter;
+import android.widget.TabHost;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -46,7 +48,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends TabActivity {
 
     int[] imageIds = new int[]
             {
@@ -78,40 +80,25 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //--
-        lv = (ListView) findViewById(R.id.listView);
-        lv.setAdapter(new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, mStrings));
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                int id2 = view.getId();
-            }
-        });
-        // 设置ListView启用过滤
-        lv.setTextFilterEnabled(true);
+        TabHost tabHost = getTabHost();
+        TabHost.TabSpec tab1 = tabHost.newTabSpec("tab1")
+                .setIndicator("已接电话")
+                .setContent(R.id.tab01);
+        tabHost.addTab(tab1);
 
-        sv = (android.widget.SearchView)this.findViewById(R.id.searchView);
-        sv.setSubmitButtonEnabled(true);
-        sv.setIconifiedByDefault(false);
-        sv.setQueryHint("查找");
-        sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                showToast(query);
-                return false;
-            }
+        TabHost.TabSpec tab2 = tabHost.newTabSpec("tab2")
+                .setIndicator("呼出电话")
+                .setContent(R.id.tab02);
+        tabHost.addTab(tab2);
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                if (TextUtils.isEmpty(newText)){
-                    lv.clearTextFilter();
-                }
-                else{
-                    lv.setFilterText(newText);
-                }
-                return true;
-            }
-        });
+
+        TabHost.TabSpec tab3 = tabHost.newTabSpec("tab3")
+                .setIndicator("未接电话")
+                .setContent(R.id.tab03);
+        tabHost.addTab(tab3);
+
+
+
     }
 
 
