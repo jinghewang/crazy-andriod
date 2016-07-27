@@ -1,6 +1,8 @@
 package com.hbdworld.test26;
 
 import android.app.TabActivity;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.widget.SearchView;
 import android.app.Notification;
@@ -48,7 +50,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends TabActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     int[] imageIds = new int[]
             {
@@ -80,27 +82,30 @@ public class MainActivity extends TabActivity {
         setContentView(R.layout.activity_main);
 
         //--
-        TabHost tabHost = getTabHost();
-        TabHost.TabSpec tab1 = tabHost.newTabSpec("tab1")
-                .setIndicator("已接电话")
-                .setContent(R.id.tab01);
-        tabHost.addTab(tab1);
+        Button simple = this.getObject(Button.class, R.id.simple);
+        Button simpleList = this.getObject(Button.class, R.id.simpleList);
+        Button singleChoice = this.getObject(Button.class, R.id.singleChoice);
+        Button multiChoice = this.getButton(R.id.multiChoice);
+        Button customList = this.getButton(R.id.customList);
+        Button customView = this.getButton(R.id.customView);
 
-        TabHost.TabSpec tab2 = tabHost.newTabSpec("tab2")
-                .setIndicator("呼出电话")
-                .setContent(R.id.tab02);
-        tabHost.addTab(tab2);
-
-
-        TabHost.TabSpec tab3 = tabHost.newTabSpec("tab3")
-                .setIndicator("未接电话")
-                .setContent(R.id.tab03);
-        tabHost.addTab(tab3);
-
-
+        simple.setOnClickListener(this);
+        simpleList.setOnClickListener(this);
+        singleChoice.setOnClickListener(this);
+        multiChoice.setOnClickListener(this);
+        customList.setOnClickListener(this);
+        customView.setOnClickListener(this);
 
     }
 
+
+    public Button getButton( int id){
+        return this.getObject(Button.class,id);
+    }
+
+    public <T> T getObject(Class<T> t, int id){
+        return (T)this.findViewById(id);
+    }
 
     private void showToast(String msg)
     {
@@ -116,5 +121,58 @@ public class MainActivity extends TabActivity {
             items.add(item);
         }
         return items;
+    }
+
+    @Override
+    public void onClick(View view) {
+
+        Button btn = (Button)view;
+        switch (view.getId()){
+
+            case R.id.simple:
+
+                AlertDialog.Builder dialog = new AlertDialog.Builder(this)
+                        .setTitle(btn.getText())
+                        .setCancelable(true)
+                        .setIcon(R.drawable.tools)
+                        .setMessage("对话框的测试内容\n第二行内容")
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                showToast("确定");
+                            }
+                        })
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                showToast("取消");
+                            }
+                        });
+                dialog.create()
+                        .show();
+
+                break;
+
+            case R.id.simpleList:
+
+                break;
+
+            case R.id.singleChoice:
+
+                break;
+
+            case R.id.multiChoice:
+
+                break;
+
+            case R.id.customList:
+
+                break;
+
+            default:
+
+                break;
+        }
+
     }
 }
