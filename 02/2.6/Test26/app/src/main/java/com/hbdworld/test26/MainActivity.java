@@ -126,12 +126,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
 
+        AlertDialog.Builder dialog = null;
         Button btn = (Button)view;
         switch (view.getId()){
 
             case R.id.simple:
 
-                AlertDialog.Builder dialog = new AlertDialog.Builder(this)
+                dialog = new AlertDialog.Builder(this)
                         .setTitle(btn.getText())
                         .setCancelable(true)
                         .setIcon(R.drawable.tools)
@@ -155,17 +156,140 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.simpleList:
 
+                dialog = new AlertDialog.Builder(this)
+                        .setTitle(btn.getText())
+                        .setCancelable(true)
+                        .setIcon(R.drawable.tools)
+                        //.setMessage("对话框的测试内容\n第二行内容")
+                        .setItems(strs, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                showToast("你选中了" + strs[i]);
+                            }
+                        })
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                showToast("确定");
+                            }
+                        })
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                showToast("取消");
+                            }
+                        });
+                dialog.create()
+                        .show();
+
                 break;
 
             case R.id.singleChoice:
+
+                dialog = new AlertDialog.Builder(this)
+                        .setTitle(btn.getText())
+                        .setCancelable(true)
+                        .setIcon(R.drawable.tools)
+                        //.setMessage("对话框的测试内容\n第二行内容")
+                        .setSingleChoiceItems(strs,1, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                showToast("你选中了" + strs[i]);
+                            }
+                        })
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                showToast("确定");
+                            }
+                        })
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                showToast("取消");
+                            }
+                        });
+                dialog.create()
+                        .show();
 
                 break;
 
             case R.id.multiChoice:
 
+                dialog = new AlertDialog.Builder(this)
+                        .setTitle(btn.getText())
+                        .setCancelable(true)
+                        .setIcon(R.drawable.tools)
+                        //.setMessage("对话框的测试内容\n第二行内容")
+                        .setMultiChoiceItems(strs, new boolean[]{false, true, true, false}, new DialogInterface.OnMultiChoiceClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+                                showToast("你选中了" + strs[i] + "value" + String.valueOf(b));
+                            }
+                        })
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                showToast("确定");
+                            }
+                        })
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                showToast("取消");
+                            }
+                        });
+                dialog.create()
+                        .show();
                 break;
 
             case R.id.customList:
+
+                dialog = new AlertDialog.Builder(this)
+                        .setTitle(btn.getText())
+                        .setCancelable(true)
+                        .setIcon(R.drawable.tools)
+                        //.setMessage("对话框的测试内容\n第二行内容")
+                        .setAdapter(new ArrayAdapter<String>(MainActivity.this,R.layout.array_item,strs),null)
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                showToast("确定");
+                            }
+                        })
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                showToast("取消");
+                            }
+                        });
+                dialog.create()
+                        .show();
+
+                break;
+
+            case R.id.customView:
+
+                dialog = new AlertDialog.Builder(this)
+                        .setTitle(btn.getText())
+                        .setCancelable(true)
+                        .setIcon(R.drawable.tools)
+                        //.setMessage("对话框的测试内容\n第二行内容")
+                        .setView(R.layout.activity_other)
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                showToast("确定");
+                            }
+                        })
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                showToast("取消");
+                            }
+                        });
+                dialog.create()
+                        .show();
 
                 break;
 
