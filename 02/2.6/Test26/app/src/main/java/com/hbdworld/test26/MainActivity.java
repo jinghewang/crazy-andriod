@@ -1,6 +1,8 @@
 package com.hbdworld.test26;
 
+import android.app.DatePickerDialog;
 import android.app.TabActivity;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -82,20 +84,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         //--
-        Button simple = this.getObject(Button.class, R.id.simple);
-        Button simpleList = this.getObject(Button.class, R.id.simpleList);
-        Button singleChoice = this.getObject(Button.class, R.id.singleChoice);
-        Button multiChoice = this.getButton(R.id.multiChoice);
-        Button customList = this.getButton(R.id.customList);
-        Button customView = this.getButton(R.id.customView);
+        Button dateBn = this.getObject(Button.class, R.id.dateBn);
+        Button timeBn = this.getObject(Button.class, R.id.timeBn);
 
-        simple.setOnClickListener(this);
-        simpleList.setOnClickListener(this);
-        singleChoice.setOnClickListener(this);
-        multiChoice.setOnClickListener(this);
-        customList.setOnClickListener(this);
-        customView.setOnClickListener(this);
-
+        dateBn.setOnClickListener(this);
+        timeBn.setOnClickListener(this);
     }
 
 
@@ -126,170 +119,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
 
-        AlertDialog.Builder dialog = null;
+        Calendar calendar = Calendar.getInstance();
         Button btn = (Button)view;
         switch (view.getId()){
-
-            case R.id.simple:
-
-                dialog = new AlertDialog.Builder(this)
-                        .setTitle(btn.getText())
-                        .setCancelable(true)
-                        .setIcon(R.drawable.tools)
-                        .setMessage("对话框的测试内容\n第二行内容")
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                showToast("确定");
-                            }
-                        })
-                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                showToast("取消");
-                            }
-                        });
-                dialog.create()
-                        .show();
-
+            case R.id.dateBn:
+                DatePickerDialog datePickerDialog = new DatePickerDialog(MainActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                        showToast(String.format("%d-%d-%d",i,i1,i2));
+                    }
+                }, calendar.get(Calendar.YEAR), calendar.get(calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+                datePickerDialog.show();
                 break;
 
-            case R.id.simpleList:
-
-                dialog = new AlertDialog.Builder(this)
-                        .setTitle(btn.getText())
-                        .setCancelable(true)
-                        .setIcon(R.drawable.tools)
-                        //.setMessage("对话框的测试内容\n第二行内容")
-                        .setItems(strs, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                showToast("你选中了" + strs[i]);
-                            }
-                        })
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                showToast("确定");
-                            }
-                        })
-                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                showToast("取消");
-                            }
-                        });
-                dialog.create()
-                        .show();
-
-                break;
-
-            case R.id.singleChoice:
-
-                dialog = new AlertDialog.Builder(this)
-                        .setTitle(btn.getText())
-                        .setCancelable(true)
-                        .setIcon(R.drawable.tools)
-                        //.setMessage("对话框的测试内容\n第二行内容")
-                        .setSingleChoiceItems(strs,1, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                showToast("你选中了" + strs[i]);
-                            }
-                        })
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                showToast("确定");
-                            }
-                        })
-                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                showToast("取消");
-                            }
-                        });
-                dialog.create()
-                        .show();
-
-                break;
-
-            case R.id.multiChoice:
-
-                dialog = new AlertDialog.Builder(this)
-                        .setTitle(btn.getText())
-                        .setCancelable(true)
-                        .setIcon(R.drawable.tools)
-                        //.setMessage("对话框的测试内容\n第二行内容")
-                        .setMultiChoiceItems(strs, new boolean[]{false, true, true, false}, new DialogInterface.OnMultiChoiceClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i, boolean b) {
-                                showToast("你选中了" + strs[i] + "value" + String.valueOf(b));
-                            }
-                        })
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                showToast("确定");
-                            }
-                        })
-                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                showToast("取消");
-                            }
-                        });
-                dialog.create()
-                        .show();
-                break;
-
-            case R.id.customList:
-
-                dialog = new AlertDialog.Builder(this)
-                        .setTitle(btn.getText())
-                        .setCancelable(true)
-                        .setIcon(R.drawable.tools)
-                        //.setMessage("对话框的测试内容\n第二行内容")
-                        .setAdapter(new ArrayAdapter<String>(MainActivity.this,R.layout.array_item,strs),null)
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                showToast("确定");
-                            }
-                        })
-                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                showToast("取消");
-                            }
-                        });
-                dialog.create()
-                        .show();
-
-                break;
-
-            case R.id.customView:
-
-                dialog = new AlertDialog.Builder(this)
-                        .setTitle(btn.getText())
-                        .setCancelable(true)
-                        .setIcon(R.drawable.tools)
-                        //.setMessage("对话框的测试内容\n第二行内容")
-                        .setView(R.layout.activity_other)
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                showToast("确定");
-                            }
-                        })
-                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                showToast("取消");
-                            }
-                        });
-                dialog.create()
-                        .show();
+            case R.id.timeBn:
+                TimePickerDialog timePickerDialog = new TimePickerDialog(MainActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int i, int i1) {
+                        showToast(String.format("%d:%d",i,i1));
+                    }
+                }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
+                timePickerDialog.show();
 
                 break;
 
