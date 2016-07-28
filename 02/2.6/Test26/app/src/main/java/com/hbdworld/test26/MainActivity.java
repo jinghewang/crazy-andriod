@@ -6,6 +6,8 @@ import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.view.Gravity;
+import android.widget.PopupWindow;
 import android.widget.SearchView;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -71,11 +73,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     "疯狂Ajax讲义"
             };
 
-    SearchView sv;
-    ListView lv;
     private final String[] mStrings = { "aaaaa", "bbbbbb", "cccccc" };
 
-
+    View root;
+    PopupWindow popupWindow;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -84,11 +85,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         //--
-        Button dateBn = this.getObject(Button.class, R.id.dateBn);
-        Button timeBn = this.getObject(Button.class, R.id.timeBn);
+        root = this.getLayoutInflater().inflate(R.layout.popup,null);
+        popupWindow = new PopupWindow(root,560,720);
+        Button popup = this.getObject(Button.class, R.id.popup);
+        popup.setOnClickListener(this);
+        Button close = (Button)root.findViewById(R.id.close);
+        close.setOnClickListener(this);
+    }
 
-        dateBn.setOnClickListener(this);
-        timeBn.setOnClickListener(this);
+    @Override
+    public void onClick(View view) {
+        Button btn = (Button)view;
+        switch (view.getId()){
+            case R.id.popup:
+                popupWindow.showAtLocation(this.findViewById(R.id.popup), Gravity.CENTER,20,20);
+                break;
+
+            case R.id.close:
+                popupWindow.dismiss();
+                break;
+
+            default:
+                break;
+        }
     }
 
 
@@ -114,39 +133,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             items.add(item);
         }
         return items;
-    }
-
-    @Override
-    public void onClick(View view) {
-
-        Calendar calendar = Calendar.getInstance();
-        Button btn = (Button)view;
-        switch (view.getId()){
-            case R.id.dateBn:
-                DatePickerDialog datePickerDialog = new DatePickerDialog(MainActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                        showToast(String.format("%d-%d-%d",i,i1,i2));
-                    }
-                }, calendar.get(Calendar.YEAR), calendar.get(calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-                datePickerDialog.show();
-                break;
-
-            case R.id.timeBn:
-                TimePickerDialog timePickerDialog = new TimePickerDialog(MainActivity.this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                        showToast(String.format("%d:%d",i,i1));
-                    }
-                }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
-                timePickerDialog.show();
-
-                break;
-
-            default:
-
-                break;
-        }
-
     }
 }

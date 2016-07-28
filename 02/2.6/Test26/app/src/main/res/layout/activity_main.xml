@@ -5,30 +5,11 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal">
 
-    <EditText
-        android:id="@+id/show"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:editable="false"
-        />
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        >
         <Button
-            android:id="@+id/dateBn"
+            android:id="@+id/popup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="设置日期"
+            android:text="popup"
             />
-        <Button
-            android:id="@+id/timeBn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="设置时间"
-            />
-    </LinearLayout>
 
 </LinearLayout>
