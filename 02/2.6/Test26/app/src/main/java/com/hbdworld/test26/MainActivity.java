@@ -4,8 +4,11 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.hbdworld.test26.bases.MyClickListener;
+import com.hbdworld.test26.bases.SendSmsListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,13 +41,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button btn = this.getButton(R.id.open);
-        btn.setOnClickListener(new MyClickListener());
+        EditText address = this.getTextView(R.id.address);
+        EditText content = this.getTextView(R.id.content);
+        address.setText("15210061902");
+        content.setText("今天是个好天气");
+
+        Button send = this.getButton(R.id.send);
+        send.setOnLongClickListener(new SendSmsListener(this,address,content));
     }
 
 
     public Button getButton( int id){
         return this.getObject(Button.class,id);
+    }
+
+    public EditText getTextView(int id){
+        return this.getObject(EditText.class,id);
     }
 
     public <T> T getObject(Class<T> t, int id){
