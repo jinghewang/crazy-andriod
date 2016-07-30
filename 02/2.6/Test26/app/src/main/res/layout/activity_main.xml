@@ -6,21 +6,15 @@
     android:orientation="vertical">
 
     <Button
+        android:id="@+id/open"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="showSpinner"
-        android:text="环形进度条" />
+        android:text="open" />
 
     <Button
+        android:id="@+id/close"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="showIndeterminate"
-        android:text="不显示进度的进度条" />
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="showProgress"
-        android:text="显示进度的进度条" />
+        android:text="close" />
 
 </LinearLayout>
