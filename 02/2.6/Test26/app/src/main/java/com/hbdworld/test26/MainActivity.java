@@ -3,12 +3,16 @@ package com.hbdworld.test26;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.hbdworld.test26.bases.MyButton;
 import com.hbdworld.test26.bases.MyClickListener;
 import com.hbdworld.test26.bases.SendSmsListener;
+import com.hbdworld.test26.utils.CrazyUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,13 +45,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        EditText address = this.getTextView(R.id.address);
-        EditText content = this.getTextView(R.id.content);
-        address.setText("15210061902");
-        content.setText("今天是个好天气");
-
-        Button send = this.getButton(R.id.send);
-        send.setOnLongClickListener(new SendSmsListener(this,address,content));
+        MyButton myButton = this.getObject(MyButton.class,R.id.mybtn);
+        myButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.w("zx","uv");
+            }
+        });
     }
 
 

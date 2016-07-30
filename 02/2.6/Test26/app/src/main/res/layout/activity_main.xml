@@ -5,24 +5,10 @@
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/address"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="请填写收信号码"
-        />
-    <EditText
-        android:id="@+id/content"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="请填写短信内容"
-        android:lines="3"
-        />
-    <Button
-        android:id="@+id/send"
+    <com.hbdworld.test26.bases.MyButton
+        android:id="@+id/mybtn"
+        android:text="单击我"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="发送"
-        />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
