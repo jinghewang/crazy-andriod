@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -45,17 +46,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MyButton myButton = this.getObject(MyButton.class,R.id.mybtn);
-        myButton.setOnClickListener(new View.OnClickListener() {
+        Button myButton = this.getObject(Button.class,R.id.mybtn);
+        myButton.setOnKeyListener(new View.OnKeyListener() {
             @Override
-            public void onClick(View view) {
-                Log.w("zx","uv");
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if (keyEvent.getAction() == KeyEvent.ACTION_DOWN){
+                    Log.v("-Listener-", "the onKeyDown in Listener");
+                }
+                return true;
             }
         });
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        super.onKeyDown(keyCode, event);
+        Log.v("-Activity-", "the onKeyDown in Activity");
+        return false;
+    }
 
-    public Button getButton( int id){
+    public Button getButton(int id){
         return this.getObject(Button.class,id);
     }
 
