@@ -2,7 +2,11 @@ package com.hbdworld.test26;
 
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.LayoutDirection;
@@ -35,13 +39,39 @@ public class MainActivity extends AppCompatActivity {
             };
 
 
-    String[] strs = new String[]
-            {
-                    "疯狂Java讲义",
-                    "轻量级Java EE企业应用实战",
-                    "疯狂Android讲义",
-                    "疯狂Ajax讲义"
+    static final String UPPER_NUM = "upper";
+    EditText etNum;
+    CalThread calThread;
+
+
+
+    class CalThread extends Thread{
+
+        public Handler mHandler;
+
+        @Override
+        public void run() {
+            //super.run();
+
+            Looper.prepare();
+            mHandler = new Handler(){
+                @Override
+                public void handleMessage(Message msg) {
+                    //super.handleMessage(msg);
+
+                    CrazyUtils.showToast(MainActivity.this,"loop");
+
+                    if (msg.what == 0x123){
+                        int num = msg.getData().getInt(UPPER_NUM);
+                        CrazyUtils.showToast(MainActivity.this,String.valueOf(num));
+                    }
+                }
             };
+
+            Looper.loop();
+        }
+    }
+
 
 
     @Override
@@ -49,31 +79,19 @@ public class MainActivity extends AppCompatActivity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Button myButton = this.getObject(Button.class,R.id.mybtn);
-        myButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Configuration configuration = getResources().getConfiguration();
-                if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                    MainActivity.this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                } else {
-                    MainActivity.this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                }
-            }
-        });
-
+        etNum = this.getObject(EditText.class,R.id.etNum);
+        calThread = new CalThread();
+        calThread.start();
     }
 
-    // 重写该方法，用于监听系统设置的更改，主要是监控屏幕方向的更改
-    @Override
-    public void onConfigurationChanged(Configuration newConfig)
-    {
-        super.onConfigurationChanged(newConfig);
-        String screen = newConfig.orientation ==
-                Configuration.ORIENTATION_LANDSCAPE ? "横向屏幕" : "竖向屏幕";
-        Toast.makeText(this, "系统的屏幕方向发生改变" + "\n修改后的屏幕方向为："
-                + screen, Toast.LENGTH_LONG).show();
+    public void cal(View view){
+        Message message = new Message();
+        message.what = 0x123;
+        Bundle bundle = new Bundle();
+        bundle.putInt(UPPER_NUM,Integer.parseInt(etNum.getText().toString()));
+        message.setData(bundle);
+        calThread.mHandler.sendMessage(message);
+
     }
 
 

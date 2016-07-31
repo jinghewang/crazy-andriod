@@ -5,10 +5,16 @@
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
+    <EditText
+        android:id="@+id/etNum"
+        android:inputType="number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="请输入上限"/>
     <Button
-        android:id="@+id/mybtn"
-        android:text="单击我"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="cal"
+        android:text="计算"/>
 
 </LinearLayout>
