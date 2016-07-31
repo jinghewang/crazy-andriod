@@ -17,4 +17,13 @@
         android:onClick="cal"
         android:text="计算"/>
 
+
+    <!-- 定义一个ImageView组件 -->
+    <ImageView
+        android:id="@+id/show"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="center"
+        />
+
 </LinearLayout>

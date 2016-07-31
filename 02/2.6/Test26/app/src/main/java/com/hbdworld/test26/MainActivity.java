@@ -15,6 +15,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +28,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,38 +43,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     static final String UPPER_NUM = "upper";
-    EditText etNum;
-    CalThread calThread;
-
-
-
-    class CalThread extends Thread{
-
-        public Handler mHandler;
-
-        @Override
-        public void run() {
-            //super.run();
-
-            Looper.prepare();
-            mHandler = new Handler(){
-                @Override
-                public void handleMessage(Message msg) {
-                    //super.handleMessage(msg);
-
-                    CrazyUtils.showToast(MainActivity.this,"loop");
-
-                    if (msg.what == 0x123){
-                        int num = msg.getData().getInt(UPPER_NUM);
-                        CrazyUtils.showToast(MainActivity.this,String.valueOf(num));
-                    }
-                }
-            };
-
-            Looper.loop();
-        }
-    }
-
+    int currentImageId = 0;
+    private int what = 0x123;
 
 
     @Override
@@ -79,20 +52,28 @@ public class MainActivity extends AppCompatActivity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        etNum = this.getObject(EditText.class,R.id.etNum);
-        calThread = new CalThread();
-        calThread.start();
+
+        final ImageView show = (ImageView) findViewById(R.id.show);
+        final Handler handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                //super.handleMessage(msg);
+                if (msg.what == what) {
+                    show.setImageResource(imageIds[currentImageId++ % imageIds.length]);
+                }
+            }
+        };
+
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                handler.sendEmptyMessage(what);
+            }
+        },0,1200);
     }
 
-    public void cal(View view){
-        Message message = new Message();
-        message.what = 0x123;
-        Bundle bundle = new Bundle();
-        bundle.putInt(UPPER_NUM,Integer.parseInt(etNum.getText().toString()));
-        message.setData(bundle);
-        calThread.mHandler.sendMessage(message);
 
-    }
+
 
 
     public Button getButton(int id){
