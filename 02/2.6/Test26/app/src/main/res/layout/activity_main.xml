@@ -5,25 +5,19 @@
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/etNum"
-        android:inputType="number"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="请输入上限"/>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="cal"
-        android:text="计算"/>
-
-
-    <!-- 定义一个ImageView组件 -->
-    <ImageView
+    <TextView
         android:id="@+id/show"
+        android:background="@drawable/swift"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="center"
-        />
+        android:layout_height="300dp"
+        android:textSize="14dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="下载"
+        android:onClick="download" />
 
 </LinearLayout>
