@@ -5,7 +5,7 @@
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
-    <com.hbdworld.test26.bases.MyButton
+    <Button
         android:id="@+id/mybtn"
         android:text="单击我"
         android:layout_width="wrap_content"

@@ -1,14 +1,18 @@
 package com.hbdworld.test26;
 
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.LayoutDirection;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hbdworld.test26.bases.MyButton;
 import com.hbdworld.test26.bases.MyClickListener;
@@ -47,23 +51,31 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Button myButton = this.getObject(Button.class,R.id.mybtn);
-        myButton.setOnKeyListener(new View.OnKeyListener() {
+        myButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                if (keyEvent.getAction() == KeyEvent.ACTION_DOWN){
-                    Log.v("-Listener-", "the onKeyDown in Listener");
+            public void onClick(View view) {
+                Configuration configuration = getResources().getConfiguration();
+                if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    MainActivity.this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                } else {
+                    MainActivity.this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
                 }
-                return true;
             }
         });
+
     }
 
+    // 重写该方法，用于监听系统设置的更改，主要是监控屏幕方向的更改
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        super.onKeyDown(keyCode, event);
-        Log.v("-Activity-", "the onKeyDown in Activity");
-        return false;
+    public void onConfigurationChanged(Configuration newConfig)
+    {
+        super.onConfigurationChanged(newConfig);
+        String screen = newConfig.orientation ==
+                Configuration.ORIENTATION_LANDSCAPE ? "横向屏幕" : "竖向屏幕";
+        Toast.makeText(this, "系统的屏幕方向发生改变" + "\n修改后的屏幕方向为："
+                + screen, Toast.LENGTH_LONG).show();
     }
+
 
     public Button getButton(int id){
         return this.getObject(Button.class,id);
