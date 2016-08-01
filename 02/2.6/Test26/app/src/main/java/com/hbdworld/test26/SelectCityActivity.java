@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.hbdworld.test26.pojo.Person;
+
 public class SelectCityActivity extends AppCompatActivity {
 
     @Override
@@ -20,6 +22,8 @@ public class SelectCityActivity extends AppCompatActivity {
 
                 Intent intent = getIntent();
                 intent.putExtra("name","wjh");
+                Person p = (Person)intent.getSerializableExtra("person");
+                String name = p.getName();
                 SelectCityActivity.this.setResult(100,intent);
                 SelectCityActivity.this.finish();
                 //return false;

@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.hbdworld.test26.bases.MyButton;
 import com.hbdworld.test26.bases.MyClickListener;
 import com.hbdworld.test26.bases.SendSmsListener;
+import com.hbdworld.test26.pojo.Person;
 import com.hbdworld.test26.utils.CrazyUtils;
 
 import java.io.BufferedReader;
@@ -71,6 +72,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
+                Bundle bundle = new Bundle();
+                Person p = new Person("wjh","123456","male");
+                bundle.putSerializable("person",p);
+                intent.putExtras(bundle);
                 intent.setClass(MainActivity.this,SelectCityActivity.class);
                 startActivityForResult(intent,0);
             }
