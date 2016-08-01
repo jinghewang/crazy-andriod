@@ -2,6 +2,7 @@ package com.hbdworld.test26;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     int currentImageId = 0;
     private int what = 0x123;
     private TextView show;
+    Button start ;
 
 
     @Override
@@ -64,85 +66,31 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         //--
         show = (TextView) findViewById(R.id.show);
-    }
-
-
-    // 重写该方法，为界面的按钮提供事件响应方法
-    public void download(View source) throws MalformedURLException
-    {
-        DownTask task = new DownTask(this);
-        task.execute(new URL("http://www.crazyit.org/ethos.php"));
-    }
-
-    class DownTask extends AsyncTask<URL,Integer,String>{
-
-        // 可变长的输入参数，与AsyncTask.exucute()对应
-        ProgressDialog pdialog;
-        // 定义记录已经读取行的数量
-        int hasRead = 0;
-        Context mContext ;
-
-        public DownTask(Context context) {
-            this.mContext = context;
-        }
-
-        @Override
-        protected String doInBackground(URL... params) {
-
-            StringBuilder sb = new StringBuilder();
-            try{
-
-                URLConnection connection = params[0].openConnection();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(),"utf-8"));
-                String line = null;
-                while ((line = reader.readLine()) != null){
-                    sb.append(line + "\n");
-                    hasRead++;
-                    publishProgress(hasRead);
-                    //Thread.currentThread().wait(200);
-                }
-                return sb.toString();
+        start = (Button)this.findViewById(R.id.start);
+        start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this,SelectCityActivity.class);
+                startActivityForResult(intent,0);
             }
-            catch (Exception ex){
-                ex.printStackTrace();
-            }
+        });
 
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            // 返回HTML页面的内容
-            show.setText(result);
-            pdialog.dismiss();
-        }
-
-        @Override
-        protected void onPreExecute() {
-            pdialog = new ProgressDialog(mContext);
-            // 设置对话框的标题
-            pdialog.setTitle("任务正在执行中");
-            // 设置对话框显示的内容
-            pdialog.setMessage("任务正在执行中，敬请等待...");
-            // 设置对话框不能用“取消”按钮关闭
-            pdialog.setCancelable(false);
-            // 设置该进度条的最大进度值
-            pdialog.setMax(202);
-            // 设置对话框的进度条风格
-            pdialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            // 设置对话框的进度条是否显示进度
-            pdialog.setIndeterminate(false);
-            pdialog.show();
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            // 更新进度
-            show.setText("已经读取了【" + values[0] + "】行！");
-            pdialog.setProgress(values[0]);
-        }
     }
 
+    private String tag = "result";
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //super.onActivityResult(requestCode, resultCode, data);
+
+        String name = data.getStringExtra("name");
+        Log.w("name",name);
+        Log.w("reqeustCode",String.valueOf( requestCode));
+        Log.w("resultCode",String.valueOf(resultCode));
+
+
+    }
 
     public Button getButton(int id){
         return this.getObject(Button.class,id);
