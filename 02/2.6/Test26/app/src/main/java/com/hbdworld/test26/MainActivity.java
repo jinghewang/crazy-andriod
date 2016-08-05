@@ -1,5 +1,6 @@
 package com.hbdworld.test26;
 
+import android.app.LauncherActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -17,9 +18,11 @@ import android.util.LayoutDirection;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,7 +45,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends LauncherActivity {
 
     int[] imageIds = new int[]
             {
@@ -52,49 +55,26 @@ public class MainActivity extends AppCompatActivity {
                     , R.drawable.bomb14, R.drawable.bomb15, R.drawable.bomb16
             };
 
-
-    static final String UPPER_NUM = "upper";
-    int currentImageId = 0;
-    private int what = 0x123;
-    private TextView show;
-    Button start ;
-
+    String[] names = new String[]{"设置程序设置", "查看星际兵种"};
+    Class<?>[] classz = {PreferenceActivityTest.class, PreferenceActivityTest.class};
+    private String TAG = "---hbd---";
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        //setContentView(R.layout.activity_main);
         //--
-        show = (TextView) findViewById(R.id.show);
-        start = (Button)this.findViewById(R.id.start);
-        start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent();
-                Bundle bundle = new Bundle();
-                Person p = new Person("wjh","123456","male");
-                bundle.putSerializable("person",p);
-                intent.putExtras(bundle);
-                intent.setClass(MainActivity.this,SelectCityActivity.class);
-                startActivityForResult(intent,0);
-            }
-        });
+        ListAdapter adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,names);
+        this.setListAdapter(adapter);
 
+        Log.v(TAG,"oncreate");
     }
 
-    private String tag = "result";
-
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //super.onActivityResult(requestCode, resultCode, data);
-
-        String name = data.getStringExtra("name");
-        Log.w("name",name);
-        Log.w("reqeustCode",String.valueOf( requestCode));
-        Log.w("resultCode",String.valueOf(resultCode));
-
-
+    protected Intent intentForPosition(int position) {
+        //return super.intentForPosition(position);
+        return new Intent(this,classz[position]);
     }
 
     public Button getButton(int id){
