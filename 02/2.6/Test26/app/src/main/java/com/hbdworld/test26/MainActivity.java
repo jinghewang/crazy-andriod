@@ -56,7 +56,7 @@ public class MainActivity extends LauncherActivity {
             };
 
     String[] names = new String[]{"设置程序设置", "查看星际兵种"};
-    Class<?>[] classz = {PreferenceActivityTest.class, PreferenceActivityTest.class};
+    Class<?>[] classz = {PreferenceActivityTest.class, ExpandableListActivityTest.class};
     private String TAG = "---hbd---";
 
     @Override
