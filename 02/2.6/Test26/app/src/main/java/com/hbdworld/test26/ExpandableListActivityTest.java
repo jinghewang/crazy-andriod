@@ -68,9 +68,9 @@ public class ExpandableListActivityTest extends ExpandableListActivity {
             public View getGroupView(int i, boolean b, View view, ViewGroup viewGroup) {
                 LinearLayout linearLayout = new LinearLayout(ExpandableListActivityTest.this);
                 linearLayout.setOrientation(LinearLayout.HORIZONTAL);
-                ImageView imageView = new ImageView(ExpandableListActivityTest.this);
-                imageView.setImageResource(logos[i]);
-                linearLayout.addView(imageView);
+                ImageView logo = new ImageView(ExpandableListActivityTest.this);
+                logo.setImageResource(logos[i]);
+                linearLayout.addView(logo);
                 TextView textView = new TextView(ExpandableListActivityTest.this);
                 textView.setText(this.getGroup(i).toString());
                 textView.setTextSize(20);
