@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
@@ -45,7 +46,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends LauncherActivity {
+public class MainActivity extends AppCompatActivity {
 
     int[] imageIds = new int[]
             {
@@ -59,22 +60,70 @@ public class MainActivity extends LauncherActivity {
     Class<?>[] classz = {PreferenceActivityTest.class, ExpandableListActivityTest.class};
     private String TAG = "---hbd---";
 
+    private static final String ACTION_OTHER = "com.hbdworld.action.OTHER";
+
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main);
         //--
-        ListAdapter adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,names);
-        this.setListAdapter(adapter);
+        Button btn = (Button)this.findViewById(R.id.btn_click);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setAction(ACTION_OTHER);
+                //Uri data = Uri.parse("http://www.baidu.com");
+                //intent.setData(data);
+                startActivity(intent);
+            }
+        });
 
         Log.v(TAG,"oncreate");
     }
 
     @Override
-    protected Intent intentForPosition(int position) {
-        //return super.intentForPosition(position);
-        return new Intent(this,classz[position]);
+    public void onStart()
+    {
+        super.onStart();
+        // 输出日志
+        Log.d(TAG, "-------onStart------");
+    }
+    @Override
+    public void onRestart()
+    {
+        super.onRestart();
+        // 输出日志
+        Log.d(TAG, "-------onRestart------");
+    }
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        // 输出日志
+        Log.d(TAG, "-------onResume------");
+    }
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+        // 输出日志
+        Log.d(TAG, "-------onPause------");
+    }
+    @Override
+    public void onStop()
+    {
+        super.onStop();
+        // 输出日志
+        Log.d(TAG, "-------onStop------");
+    }
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        // 输出日志
+        Log.d(TAG, "-------onDestroy------");
     }
 
     public Button getButton(int id){
