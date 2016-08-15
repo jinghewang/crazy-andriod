@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     Class<?>[] classz = {PreferenceActivityTest.class, ExpandableListActivityTest.class};
     private String TAG = "---hbd---";
 
-    private static final String ACTION_OTHER = "com.hbdworld.action.OTHER";
+    private static final String ACTION_OTHER = "com.hbdworld.intent.action.OTHER";
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -74,8 +74,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent();
                 intent.setAction(ACTION_OTHER);
-                //Uri data = Uri.parse("http://www.baidu.com");
-                //intent.setData(data);
                 startActivity(intent);
             }
         });
