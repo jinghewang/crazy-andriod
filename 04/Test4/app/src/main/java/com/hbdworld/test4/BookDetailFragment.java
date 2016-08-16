@@ -1,5 +1,6 @@
 package com.hbdworld.test4;
 
+import android.app.Fragment;
 import android.app.ListFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,7 +13,7 @@ import com.hbdworld.test4.model.BookContent;
 /**
  * Created by hbd on 16/8/16.
  */
-public class BookDetailFragment extends ListFragment {
+public class BookDetailFragment extends Fragment {
 
     public static final String ITEM_ID = "item_id";
     // 保存该Fragment显示的Book对象
