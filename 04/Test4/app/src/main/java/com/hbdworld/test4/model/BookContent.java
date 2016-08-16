@@ -33,12 +33,12 @@ public class BookContent
 	static
 	{
 		// 使用静态初始化代码，将Book对象添加到List集合、Map集合中
-		addItem(new Book(1, "疯狂Java讲义"
+		addItem(new Book(0, "疯狂Java讲义"
 				, "一本全面、深入的Java学习图书，已被多家高校选做教材。"));
-		addItem(new Book(2, "疯狂Android讲义"
+		addItem(new Book(1, "疯狂Android讲义"
 				, "Android学习者的首选图书，常年占据京东、当当、 "
 				+ "亚马逊3大网站Android销量排行榜的榜首"));
-		addItem(new Book(3, "轻量级Java EE企业应用实战"
+		addItem(new Book(2, "轻量级Java EE企业应用实战"
 				, "全面介绍Java EE开发的Struts 2、Spring 3、Hibernate 4框架"));
 	}
 	private static void addItem(Book book)
