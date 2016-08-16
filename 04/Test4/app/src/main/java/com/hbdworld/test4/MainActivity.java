@@ -15,5 +15,13 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     public void onItemSelected(Integer id) {
         // 创建Bundle，准备向Fragment传入参数
         Bundle arguments = new Bundle();
+        arguments.putInt(BookDetailFragment.ITEM_ID,id);
+        BookDetailFragment detailFragment = new BookDetailFragment();
+        detailFragment.setArguments(arguments);
+
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.book_detail_container,detailFragment)
+                .commit();
     }
 }
