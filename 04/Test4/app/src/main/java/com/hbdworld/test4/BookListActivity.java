@@ -15,7 +15,9 @@ public class BookListActivity extends AppCompatActivity implements BookListFragm
         setContentView(R.layout.activity_book_list);
         if(this.findViewById(R.id.book_detail_container) != null){
             mTwoPane = true;
-            ((BookListFragment)this.getFragmentManager().findFragmentById(R.id.book_list)).setActivateOnItemClick(true);
+            ((BookListFragment) this.getFragmentManager()
+                    .findFragmentById(R.id.book_list))
+                    .setActivateOnItemClick(true);
         }
 
     }
@@ -29,16 +31,15 @@ public class BookListActivity extends AppCompatActivity implements BookListFragm
             arguments.putInt(BookDetailFragment.ITEM_ID, id);
             BookDetailFragment detailFragment = new BookDetailFragment();
             detailFragment.setArguments(arguments);
-
             getFragmentManager()
                     .beginTransaction()
                     .replace(R.id.book_detail_container, detailFragment)
                     .commit();
 
         } else {
-            Intent intent = new Intent(this,BookDetailActivity.class);
-            intent.putExtra(BookDetailFragment.ITEM_ID,id);
-            startActivity(intent);
+            Intent detailIntent = new Intent(this,BookDetailActivity.class);
+            detailIntent.putExtra(BookDetailFragment.ITEM_ID,id);
+            startActivity(detailIntent);
         }
     }
 }
