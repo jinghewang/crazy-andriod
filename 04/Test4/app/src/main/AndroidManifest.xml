@@ -19,6 +19,7 @@
             <intent-filter>
                 <action android:name="com.hbdworld.test4.intent.action.SECOND_ACTION"/>
                 <action android:name="helloWorld" />
+                <category android:name="com.hbdworld.test4.intent.category.SECOND_CATEGORY" />
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
