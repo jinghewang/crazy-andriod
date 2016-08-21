@@ -1,6 +1,7 @@
 package com.hbdworld.test4;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -25,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //--
         //Button btn = this.getView(R.id.bn);
         //Button btn2 = this.getView2(Button.class,R.id.bn);
-        this.bindOnClickListener(this, R.id.start, R.id.start2, R.id.start3, R.id.bn, R.id.call, R.id.edit);
+        this.bindOnClickListener(this, R.id.start, R.id.start2, R.id.start3, R.id.bn, R.id.call, R.id.edit,R.id.component);
     }
 
     @Override
@@ -63,6 +64,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.edit:
+
+                break;
+
+            case R.id.component:
+
+                intent = new Intent();
+                ComponentName componentName = new ComponentName(MainActivity.this,SecondActivity.class);
+                intent.setComponent(componentName);
+                startActivity(intent);
 
                 break;
 

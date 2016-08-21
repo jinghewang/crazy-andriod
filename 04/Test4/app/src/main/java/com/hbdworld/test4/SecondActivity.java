@@ -24,6 +24,12 @@ public class SecondActivity extends AppCompatActivity {
             layout.addView(textView);
         }
 
+        if (this.getIntent().getComponent() != null){
+            textView = new TextView(this);
+            textView.setText(this.getIntent().getComponent().getPackageName());
+            layout.addView(textView);
+        }
+
         this.setContentView(layout);
     }
 }

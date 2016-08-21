@@ -46,4 +46,11 @@
         android:text="向13800138000拨号"
         />
 
+    <Button
+        android:id="@+id/component"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ComponentName"
+        />
+
 </LinearLayout>
