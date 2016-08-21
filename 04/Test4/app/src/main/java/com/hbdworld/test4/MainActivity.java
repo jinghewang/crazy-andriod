@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //--
         //Button btn = this.getView(R.id.bn);
         //Button btn2 = this.getView2(Button.class,R.id.bn);
-        this.bindOnClickListener(this, new int[]{R.id.start, R.id.start2, R.id.start3, R.id.bn, R.id.call, R.id.edit});
+        this.bindOnClickListener(this, R.id.start, R.id.start2, R.id.start3, R.id.bn, R.id.call, R.id.edit);
     }
 
     @Override
@@ -56,7 +56,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.call:
-
+                intent = new Intent();
+                intent.setAction(Intent.ACTION_CALL);
+                intent.setData(Uri.parse("tel:13800138000"));
+                startActivity(intent);
                 break;
 
             case R.id.edit:
@@ -79,20 +82,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends View> T getView(int id){
+    public <T extends View> T getView(int id) {
         try {
-        return (T)this.findViewById(id);
+            return (T) this.findViewById(id);
         } catch (ClassCastException ex) {
             throw ex;
         }
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends View> T getView2(Class<T> view, int id){
-        return (T)this.findViewById(id);
+    public <T extends View> T getView2(Class<T> view, int id) {
+        return (T) this.findViewById(id);
     }
 
-    public void bindOnClickListener(View.OnClickListener listener, int[] views) {
+    public void bindOnClickListener(View.OnClickListener listener, int... views) {
         for (int view : views) {
             View v = this.findViewById(view);
             v.setOnClickListener(listener);
