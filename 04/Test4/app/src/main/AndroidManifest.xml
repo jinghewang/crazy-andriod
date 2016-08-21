@@ -10,14 +10,18 @@
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
             <intent-filter>
+                <action android:name="com.hbdworld.test4.intent.action.MAIN_ACTION"/>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SecondActivity" />
-        <activity android:name=".SecondFragment" />
-        <activity android:name=".LifecycleFragment"></activity>
+        <activity android:name=".SecondActivity" >
+            <intent-filter>
+                <action android:name="com.hbdworld.test4.intent.action.SECOND_ACTION"/>
+                <action android:name="helloWorld" />
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
