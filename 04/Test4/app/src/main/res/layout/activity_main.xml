@@ -5,65 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/scheme"
+    <com.hbdworld.test4.AlphaImageView
+        android:src="@drawable/javaee"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="匹配scheme的Intent"/>
-    <Button
-        android:id="@+id/schemeHostPort"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="匹配scheme、host、port的Intent"/>
-    <Button
-        android:id="@+id/schemeHostPath"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="匹配scheme、host、path的Intent"/>
-    <Button
-        android:id="@+id/schemeHostPortPath"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="匹配scheme、host、port、path的Intent"/>
-    <Button
-        android:id="@+id/schemeHostPortPathType"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="匹配scheme、host、port、path和type的Intent"/>
-
-
-    <Button
-        android:id="@+id/home"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Home"/>
-
-    <Button
-        android:id="@+id/baidu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="baidu"/>
-
-
-    <!-- 显示联系人姓名的文本框 -->
-    <EditText
-        android:id="@+id/show"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:editable="false"
-        android:cursorVisible="false"/>
-    <!-- 显示联系人的电话的文本框 -->
-    <EditText
-        android:id="@+id/phone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:editable="false"
-        android:cursorVisible="false"/>
-    <Button
-        android:id="@+id/view_man"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="查看联系人"/>
-
+        android:layout_height="match_parent" />
 
 </LinearLayout>

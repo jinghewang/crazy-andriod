@@ -15,7 +15,7 @@ import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends TabActivity {
+public class MainActivity extends AppCompatActivity {
 
 
     private static final String ACTION_SECOND = "com.hbdworld.test4.intent.action.SECOND_ACTION";
@@ -26,31 +26,8 @@ public class MainActivity extends TabActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.tabs);
-
-        //--
-        Intent intent = new Intent(this,SecondActivity.class);
-        intent.setData(Uri.parse("tab://1"));
-        TabHost tabHost = this.getTabHost();
-        tabHost.addTab(tabHost.newTabSpec("tab1")
-                .setIndicator("已接电话")
-                .setContent(intent));
-
-        intent = new Intent(this,SecondActivity.class);
-        intent.setData(Uri.parse("tab://2"));
-        tabHost.addTab(tabHost.newTabSpec("tab2")
-                .setIndicator("未接电话")
-                .setContent(intent));
-
-        intent = new Intent(this,SecondActivity.class);
-        intent.setData(Uri.parse("tab://3"));
-        tabHost.addTab(tabHost.newTabSpec("tab3")
-                .setIndicator("无接电话")
-                .setContent(intent));
-
+        setContentView(R.layout.activity_main);
     }
-
-
 
 
     public Button findButtonById(int view) {
