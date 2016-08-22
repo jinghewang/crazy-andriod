@@ -26,54 +26,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //--
         //Button btn = this.getView(R.id.bn);
         //Button btn2 = this.getView2(Button.class,R.id.bn);
-        this.bindOnClickListener(this, R.id.start, R.id.start2, R.id.start3, R.id.bn, R.id.call, R.id.edit,R.id.component);
+        this.bindOnClickListener(this, R.id.scheme, R.id.schemeHostPath, R.id.schemeHostPort, R.id.schemeHostPortPath, R.id.schemeHostPortPathType);
     }
 
     @Override
     public void onClick(View view) {
         Intent intent = null;
         switch (view.getId()) {
-            case R.id.start:
-                intent = new Intent(MainActivity.ACTION_SECOND);
-                startActivity(intent);
-                break;
-
-            case R.id.start2:
-                intent = new Intent(MainActivity.ACTION_HELLO);
-                startActivity(intent);
-                break;
-
-            case R.id.start3:
-                intent = new Intent(MainActivity.ACTION_SECOND);
-                intent.addCategory(CATEGORY_SECOND);
-                startActivity(intent);
-                break;
-
-            case R.id.bn:
+            case R.id.scheme://匹配scheme的Intent
                 intent = new Intent();
-                intent.setAction(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse("http://www.baidu.com"));
+                intent.setData(Uri.parse("lee://"));
                 startActivity(intent);
                 break;
 
-            case R.id.call:
+            case R.id.schemeHostPort://匹配scheme、host、port的Intent
                 intent = new Intent();
-                intent.setAction(Intent.ACTION_CALL);
-                intent.setData(Uri.parse("tel:13800138000"));
+                intent.setData(Uri.parse("lee://www.hbdworld.com.cn:8888"));
                 startActivity(intent);
                 break;
 
-            case R.id.edit:
-
-                break;
-
-            case R.id.component:
-
+            case R.id.schemeHostPath://匹配scheme、host、path的Intent
                 intent = new Intent();
-                ComponentName componentName = new ComponentName(MainActivity.this,SecondActivity.class);
-                intent.setComponent(componentName);
+                intent.setData(Uri.parse("lee://www.hbdworld.com.cn/mypath"));
                 startActivity(intent);
+                break;
 
+            case R.id.schemeHostPortPath://匹配scheme、host、port、path的Intent
+                intent = new Intent();
+                intent.setData(Uri.parse("lee://www.hbdworld.com.cn:8888/mypath"));
+                startActivity(intent);
+                break;
+
+            case R.id.schemeHostPortPathType://匹配scheme、host、port、path和type的Intent
+                intent = new Intent();
+                intent.setData(Uri.parse("lee://www.hbdworld.com.cn:8888/mypath"));
+                intent.setType("abc/xyz");
+                startActivity(intent);
                 break;
 
             default:

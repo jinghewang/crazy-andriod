@@ -14,8 +14,68 @@
             <intent-filter>
                 <action android:name="com.hbdworld.test4.intent.action.MAIN_ACTION" />
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".SchemeActivity"
+            android:label="指定scheme的Activity">
+            <intent-filter>
+                <action android:name="xx" />
+                <data android:scheme="lee" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".SchemeHostPathActivity"
+            android:label="SchemeHostPathActivity">
+            <intent-filter>
+                <action android:name="xx" />
+                <data
+                    android:host="www.hbdworld.com.cn"
+                    android:path="/mypath"
+                    android:scheme="lee" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".SchemeHostPortActivity"
+            android:label="SchemeHostPortActivity">
+            <intent-filter>
+                <action android:name="xx" />
+                <data
+                    android:host="www.hbdworld.com.cn"
+                    android:port="8888"
+                    android:scheme="lee" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".SchemeHostPortPathActivity"
+            android:label="SchemeHostPortPathActivity">
+            <intent-filter>
+                <action android:name="xx" />
+                <data
+                    android:host="www.hbdworld.com.cn"
+                    android:path="/mypath"
+                    android:port="8888"
+                    android:scheme="lee" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".SchemeHostPortPathTypeActivity"
+            android:label="SchemeHostPortPathTypeActivity">
+            <intent-filter>
+                <action android:name="xx" />
+                <data
+                    android:host="www.hbdworld.com.cn"
+                    android:mimeType="abc/xyz"
+                    android:path="/mypath"
+                    android:port="8888"
+                    android:scheme="lee" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity android:name=".SecondActivity">

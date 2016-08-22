@@ -1,56 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
+    android:layout_gravity="left"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/start"
-        android:layout_width="wrap_content"
+        android:id="@+id/scheme"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="启动指定Action、默认Category对应的Activity"
-        />
-
+        android:text="匹配scheme的Intent"/>
     <Button
-        android:id="@+id/start2"
-        android:layout_width="wrap_content"
+        android:id="@+id/schemeHostPort"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="启动指定Action、默认Category对应的Activity2"
-        />
-
-
+        android:text="匹配scheme、host、port的Intent"/>
     <Button
-        android:id="@+id/start3"
-        android:layout_width="wrap_content"
+        android:id="@+id/schemeHostPath"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="启动指定SECOND_CATEGORY"
-        />
-
-
+        android:text="匹配scheme、host、path的Intent"/>
     <Button
-        android:id="@+id/bn"
-        android:layout_width="wrap_content"
+        android:id="@+id/schemeHostPortPath"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="打开疯狂Java联盟"
-        />
+        android:text="匹配scheme、host、port、path的Intent"/>
     <Button
-        android:id="@+id/edit"
-        android:layout_width="wrap_content"
+        android:id="@+id/schemeHostPortPathType"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="编辑标识为1的联系人"
-        />
-    <Button
-        android:id="@+id/call"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="向13800138000拨号"
-        />
-
-    <Button
-        android:id="@+id/component"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="ComponentName"
-        />
-
+        android:text="匹配scheme、host、port、path和type的Intent"/>
 </LinearLayout>
