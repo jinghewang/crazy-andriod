@@ -38,4 +38,11 @@
         android:layout_height="wrap_content"
         android:text="Home"/>
 
+    <Button
+        android:id="@+id/baidu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="baidu"/>
+
+
 </LinearLayout>

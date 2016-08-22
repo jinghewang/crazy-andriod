@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -32,12 +33,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 R.id.schemeHostPort,
                 R.id.schemeHostPortPath,
                 R.id.schemeHostPortPathType,
-                R.id.home);
+                R.id.home,
+                R.id.baidu
+        );
     }
 
     @Override
     public void onClick(View view) {
         Intent intent = null;
+        Toast.makeText(MainActivity.this,"onClick",Toast.LENGTH_LONG).show();
+
         switch (view.getId()) {
             case R.id.scheme://匹配scheme的Intent
                 intent = new Intent();
@@ -69,14 +74,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent);
                 break;
 
-            case R.id.home://匹配scheme、host、port、path和type的Intent
+            case R.id.home://home
                 intent = new Intent();
                 intent.setAction(Intent.ACTION_MAIN);
                 intent.addCategory(Intent.CATEGORY_HOME);
                 startActivity(intent);
                 break;
 
+            case R.id.baidu://baidu
+                intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse("http://www.baidu.com"));
+                startActivity(intent);
+                break;
+
             default:
+                Toast.makeText(MainActivity.this,"未绑定任何动作",Toast.LENGTH_LONG).show();
                 break;
 
         }
