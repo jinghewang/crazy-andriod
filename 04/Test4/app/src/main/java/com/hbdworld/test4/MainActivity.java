@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String ACTION_SECOND = "com.hbdworld.test4.intent.action.SECOND_ACTION";
     private static final String CATEGORY_SECOND = "com.hbdworld.test4.intent.category.SECOND_CATEGORY";
     private static final String ACTION_HELLO = "helloWorld";
+    final int PICK_CONTACT = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +35,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 R.id.schemeHostPortPath,
                 R.id.schemeHostPortPathType,
                 R.id.home,
-                R.id.baidu
+                R.id.baidu,
+                R.id.view_man
         );
     }
 
@@ -88,6 +90,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent);
                 break;
 
+            case R.id.view_man://baidu
+                intent = new Intent();
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                intent.setType("vnd.android.cursor.item/phone");
+                startActivityForResult(intent,PICK_CONTACT);
+                break;
+
             default:
                 Toast.makeText(MainActivity.this,"未绑定任何动作",Toast.LENGTH_LONG).show();
                 break;
@@ -95,6 +104,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode){
+            case PICK_CONTACT:
+                if (resultCode == RESULT_OK) {
+                    Uri contactData = data.getData();
+                }
+                break;
+
+            default:
+                break;
+
+        }
+
+    }
 
     public Button findButtonById(int view) {
         return (Button) this.findViewById(view);

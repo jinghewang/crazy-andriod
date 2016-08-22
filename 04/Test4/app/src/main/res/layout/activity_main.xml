@@ -45,4 +45,25 @@
         android:text="baidu"/>
 
 
+    <!-- 显示联系人姓名的文本框 -->
+    <EditText
+        android:id="@+id/show"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:editable="false"
+        android:cursorVisible="false"/>
+    <!-- 显示联系人的电话的文本框 -->
+    <EditText
+        android:id="@+id/phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:editable="false"
+        android:cursorVisible="false"/>
+    <Button
+        android:id="@+id/view_man"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="查看联系人"/>
+
+
 </LinearLayout>
