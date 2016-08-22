@@ -1,6 +1,7 @@
 package com.hbdworld.test4;
 
 import android.app.Activity;
+import android.app.TabActivity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -10,10 +11,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends TabActivity {
 
 
     private static final String ACTION_SECOND = "com.hbdworld.test4.intent.action.SECOND_ACTION";
@@ -24,103 +26,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.tabs);
+
         //--
-        //Button btn = this.getView(R.id.bn);
-        //Button btn2 = this.getView2(Button.class,R.id.bn);
-        this.bindOnClickListener(
-                this, R.id.scheme,
-                R.id.schemeHostPath,
-                R.id.schemeHostPort,
-                R.id.schemeHostPortPath,
-                R.id.schemeHostPortPathType,
-                R.id.home,
-                R.id.baidu,
-                R.id.view_man
-        );
-    }
+        Intent intent = new Intent(this,SecondActivity.class);
+        intent.setData(Uri.parse("tab://1"));
+        TabHost tabHost = this.getTabHost();
+        tabHost.addTab(tabHost.newTabSpec("tab1")
+                .setIndicator("已接电话")
+                .setContent(intent));
 
-    @Override
-    public void onClick(View view) {
-        Intent intent = null;
-        Toast.makeText(MainActivity.this,"onClick",Toast.LENGTH_LONG).show();
+        intent = new Intent(this,SecondActivity.class);
+        intent.setData(Uri.parse("tab://2"));
+        tabHost.addTab(tabHost.newTabSpec("tab2")
+                .setIndicator("未接电话")
+                .setContent(intent));
 
-        switch (view.getId()) {
-            case R.id.scheme://匹配scheme的Intent
-                intent = new Intent();
-                intent.setData(Uri.parse("lee://"));
-                startActivity(intent);
-                break;
-
-            case R.id.schemeHostPort://匹配scheme、host、port的Intent
-                intent = new Intent();
-                intent.setData(Uri.parse("lee://www.hbdworld.com.cn:8888"));
-                startActivity(intent);
-                break;
-
-            case R.id.schemeHostPath://匹配scheme、host、path的Intent
-                intent = new Intent();
-                intent.setData(Uri.parse("lee://www.hbdworld.com.cn/mypath"));
-                startActivity(intent);
-                break;
-
-            case R.id.schemeHostPortPath://匹配scheme、host、port、path的Intent
-                intent = new Intent();
-                intent.setData(Uri.parse("lee://www.hbdworld.com.cn:8888/mypath"));
-                startActivity(intent);
-                break;
-
-            case R.id.schemeHostPortPathType://匹配scheme、host、port、path和type的Intent
-                intent = new Intent();
-                intent.setDataAndType(Uri.parse("lee://www.hbdworld.com.cn:8888/mypath"),"abc/xyz");
-                startActivity(intent);
-                break;
-
-            case R.id.home://home
-                intent = new Intent();
-                intent.setAction(Intent.ACTION_MAIN);
-                intent.addCategory(Intent.CATEGORY_HOME);
-                startActivity(intent);
-                break;
-
-            case R.id.baidu://baidu
-                intent = new Intent();
-                intent.setAction(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse("http://www.baidu.com"));
-                startActivity(intent);
-                break;
-
-            case R.id.view_man://baidu
-                intent = new Intent();
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                intent.setType("vnd.android.cursor.item/phone");
-                startActivityForResult(intent,PICK_CONTACT);
-                break;
-
-            default:
-                Toast.makeText(MainActivity.this,"未绑定任何动作",Toast.LENGTH_LONG).show();
-                break;
-
-        }
-    }
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode){
-            case PICK_CONTACT:
-                if (resultCode == RESULT_OK) {
-                    Uri contactData = data.getData();
-                }
-                break;
-
-            default:
-                break;
-
-        }
+        intent = new Intent(this,SecondActivity.class);
+        intent.setData(Uri.parse("tab://3"));
+        tabHost.addTab(tabHost.newTabSpec("tab3")
+                .setIndicator("无接电话")
+                .setContent(intent));
 
     }
+
+
+
 
     public Button findButtonById(int view) {
         return (Button) this.findViewById(view);

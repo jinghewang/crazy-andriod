@@ -15,20 +15,8 @@ public class SecondActivity extends AppCompatActivity {
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
         TextView textView = new TextView(this);
-        textView.setText(this.getIntent().getAction());
+        textView.setText(this.getIntent().getDataString());
         layout.addView(textView);
-
-        if (this.getIntent().getCategories() != null){
-            textView = new TextView(this);
-            textView.setText(this.getIntent().getCategories().toString());
-            layout.addView(textView);
-        }
-
-        if (this.getIntent().getComponent() != null){
-            textView = new TextView(this);
-            textView.setText(this.getIntent().getComponent().getPackageName());
-            layout.addView(textView);
-        }
 
         this.setContentView(layout);
     }
