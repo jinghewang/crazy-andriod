@@ -26,7 +26,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //--
         //Button btn = this.getView(R.id.bn);
         //Button btn2 = this.getView2(Button.class,R.id.bn);
-        this.bindOnClickListener(this, R.id.scheme, R.id.schemeHostPath, R.id.schemeHostPort, R.id.schemeHostPortPath, R.id.schemeHostPortPathType);
+        this.bindOnClickListener(
+                this, R.id.scheme,
+                R.id.schemeHostPath,
+                R.id.schemeHostPort,
+                R.id.schemeHostPortPath,
+                R.id.schemeHostPortPathType,
+                R.id.home);
     }
 
     @Override
@@ -59,8 +65,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.schemeHostPortPathType://匹配scheme、host、port、path和type的Intent
                 intent = new Intent();
-                intent.setData(Uri.parse("lee://www.hbdworld.com.cn:8888/mypath"));
-                intent.setType("abc/xyz");
+                intent.setDataAndType(Uri.parse("lee://www.hbdworld.com.cn:8888/mypath"),"abc/xyz");
+                startActivity(intent);
+                break;
+
+            case R.id.home://匹配scheme、host、port、path和type的Intent
+                intent = new Intent();
+                intent.setAction(Intent.ACTION_MAIN);
+                intent.addCategory(Intent.CATEGORY_HOME);
                 startActivity(intent);
                 break;
 

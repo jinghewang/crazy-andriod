@@ -19,6 +19,7 @@
         </activity>
         <activity
             android:name=".SchemeActivity"
+            android:exported="true"
             android:label="指定scheme的Activity">
             <intent-filter>
                 <action android:name="xx" />
@@ -28,6 +29,7 @@
         </activity>
         <activity
             android:name=".SchemeHostPathActivity"
+            android:exported="true"
             android:label="SchemeHostPathActivity">
             <intent-filter>
                 <action android:name="xx" />
@@ -40,6 +42,7 @@
         </activity>
         <activity
             android:name=".SchemeHostPortActivity"
+            android:exported="true"
             android:label="SchemeHostPortActivity">
             <intent-filter>
                 <action android:name="xx" />
@@ -52,6 +55,7 @@
         </activity>
         <activity
             android:name=".SchemeHostPortPathActivity"
+            android:exported="true"
             android:label="SchemeHostPortPathActivity">
             <intent-filter>
                 <action android:name="xx" />
@@ -66,6 +70,7 @@
 
         <activity
             android:name=".SchemeHostPortPathTypeActivity"
+            android:exported="true"
             android:label="SchemeHostPortPathTypeActivity">
             <intent-filter>
                 <action android:name="xx" />
@@ -82,7 +87,6 @@
             <intent-filter>
                 <action android:name="com.hbdworld.test4.intent.action.SECOND_ACTION" />
                 <action android:name="helloWorld" />
-
                 <category android:name="com.hbdworld.test4.intent.category.SECOND_CATEGORY" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

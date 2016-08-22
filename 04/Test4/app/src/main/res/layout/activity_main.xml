@@ -30,4 +30,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="匹配scheme、host、port、path和type的Intent"/>
+
+
+    <Button
+        android:id="@+id/home"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Home"/>
+
 </LinearLayout>
