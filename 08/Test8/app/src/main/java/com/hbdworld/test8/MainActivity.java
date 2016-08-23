@@ -4,56 +4,100 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    SharedPreferences preferences = null;
-    SharedPreferences.Editor editor = null;
+    ListView listView;
+    TextView textView;
+    // 记录当前的父文件夹
+    File currentParent;
+    // 记录当前路径下的所有文件的文件数组
+    File[] currentFiles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         //--
-        preferences = getSharedPreferences("crazyit", MODE_PRIVATE);
-        editor = preferences.edit();
+        listView = (ListView) findViewById(R.id.list);
+        textView = (TextView) findViewById(R.id.path);
+        // 获取系统的SD卡的目录
+        File root = new File("/mnt/sdcard/");
+        if (root.exists()) {
+            currentParent = root;
+            currentFiles = root.listFiles();
+            this.inflateListView(currentFiles);
+        }
 
-        //count
-        int count = preferences.getInt("count", 1);
-        showToast(String.format("已经使用次数：%d",count));
-        editor.putInt("count", ++count);
-        editor.commit();
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                File file = currentFiles[position];
+                if (file.isFile()){
+                    showToast("当前是文件");
+                    return;
+                }
+                File[] tmp = file.listFiles();
+                if (tmp == null || tmp.length == 0) {
+                    Toast.makeText(MainActivity.this, "当前路径不可访问或该路径下没有文件", Toast.LENGTH_SHORT).show();
+                } else {
+                    currentParent = file;
+                    currentFiles = tmp;
+                    inflateListView(currentFiles);
+                }
+            }
+        });
 
-        this.bindOnClickListener(this,R.id.read,R.id.write);
+        this.bindOnClickListener(this, R.id.parent);
+    }
+
+    private void inflateListView(File[] files)  // ①
+    {
+        List<Map<String, Object>> listItems = new ArrayList<>();
+        for (File file : files) {
+            Map<String, Object> item = new HashMap<String, Object>();
+            item.put("icon", file.isDirectory() ? R.drawable.folder : R.drawable.file);
+            item.put("fileName", file.getName());
+            listItems.add(item);
+        }
+        ListAdapter list = new SimpleAdapter(this, listItems, R.layout.line, new String[]{"icon", "fileName"}, new int[]{R.id.icon, R.id.file_name});
+        listView.setAdapter(list);
     }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
-            case R.id.read:
-                String time = preferences.getString("time",null);
-                String name = preferences.getString("name",null);
-                int age = preferences.getInt("age",0);
-
-                showToast(time);
-                showToast(name);
-                showToast(Integer.valueOf(age).toString());
-
-                break;
-
-            case R.id.write:
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日 hh:mm:ss");
-                editor.putString("time", dateFormat.format(new Date()));
-                editor.putString("name", "wjh");
-                editor.putInt("random", (int) (Math.random() * 100));
-                editor.putInt("age", 15);
-                editor.commit();
+        switch (view.getId()) {
+            case R.id.parent:
+                try {
+                    if (!currentParent.getCanonicalPath().equals("/mnt/sdcard")) {
+                        // 获取上一级目录
+                        currentParent = currentParent.getParentFile();
+                        // 列出当前目录下所有文件
+                        currentFiles = currentParent.listFiles();
+                        // 再次更新ListView
+                        inflateListView(currentFiles);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                showToast(Integer.valueOf(1).toString());
                 break;
 
             default:
@@ -62,8 +106,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    public void showToast(String msg){
-        Toast.makeText(MainActivity.this,msg,Toast.LENGTH_SHORT).show();
+    public void showToast(String msg) {
+        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
     }
 
     public Button findButtonById(int view) {
