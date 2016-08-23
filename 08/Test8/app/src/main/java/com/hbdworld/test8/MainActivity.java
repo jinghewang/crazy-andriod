@@ -21,8 +21,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         //--
-        preferences = getSharedPreferences("crazyit",MODE_PRIVATE);
+        preferences = getSharedPreferences("crazyit", MODE_PRIVATE);
         editor = preferences.edit();
+
+        //count
+        int count = preferences.getInt("count", 1);
+        showToast(String.format("已经使用次数：%d",count));
+        editor.putInt("count", ++count);
+        editor.commit();
 
         this.bindOnClickListener(this,R.id.read,R.id.write);
     }
