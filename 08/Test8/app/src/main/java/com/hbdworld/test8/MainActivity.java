@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         inflateListView(db);
 
-        this.bindOnClickListener(this, R.id.ok);
+        this.bindOnClickListener(this, R.id.ok, R.id.ok2, R.id.clear);
     }
 
     private void ensureTable(SQLiteDatabase db) {
@@ -99,10 +99,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
+        ContentValues values = null;
+        Button btn = (Button)view;
+        showToast(btn.getText().toString());
         switch (view.getId()) {
             case R.id.ok:
-
-                ContentValues values = new ContentValues();
+                values = new ContentValues();
                 values.put("news_title", tvTitle.getText().toString());
                 values.put("news_content", tvContent.getText().toString());
                 db.insert("news_inf", null, values);
@@ -110,9 +112,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 tvTitle.setText("");
                 tvContent.setText("");
 
-                // 再次更新ListView
                 inflateListView(db);
-                showToast(Integer.valueOf(1).toString());
+                break;
+
+            case R.id.ok2:
+                db.execSQL("insert into news_inf values(null , ? , ?)",new String[]{ tvTitle.getText().toString(), tvContent.getText().toString()});
+                tvTitle.setText("");
+                tvContent.setText("");
+
+                inflateListView(db);
+                break;
+
+            case R.id.clear:
+                db.execSQL("delete from news_inf");
+                tvTitle.setText("");
+                tvContent.setText("");
+
+                inflateListView(db);
                 break;
 
             default:

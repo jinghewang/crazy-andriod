@@ -3,4 +3,6 @@
     <string name="write">写入</string>
     <string name="read">读取</string>
     <string name="insert">插入</string>
+    <string name="insert2">插入2</string>
+    <string name="clear">清空</string>
 </resources>
