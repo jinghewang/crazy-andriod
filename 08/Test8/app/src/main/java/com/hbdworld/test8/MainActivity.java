@@ -15,6 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -163,6 +166,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (db != null || db.isOpen()) {
             db.close();
         }
+    }
+
+    protected ArrayList<Map<String, String>> converCursorToList(Cursor cursor){
+        ArrayList<Map<String, String>> result = new ArrayList<Map<String, String>>();
+        // 遍历Cursor结果集
+        while (cursor.moveToNext())
+        {
+            // 将结果集中的数据存入ArrayList中
+            Map<String, String> map = new HashMap<>();
+            // 取出查询记录中第2列、第3列的值
+            map.put("word", cursor.getString(1));
+            map.put("detail", cursor.getString(2));
+            result.add(map);
+        }
+        return result;
     }
 
     public void showToast(String msg) {
