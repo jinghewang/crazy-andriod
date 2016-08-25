@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         inflateListView(db);
 
-        this.bindOnClickListener(this, R.id.ok, R.id.ok2, R.id.clear);
+        this.bindOnClickListener(this, R.id.ok, R.id.ok2, R.id.clear, R.id.search);
     }
 
     private void ensureTable(SQLiteDatabase db) {
@@ -87,6 +87,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     {
         try {
             Cursor cursor = db.rawQuery("select * from news_inf", new String[]{});
+            SimpleCursorAdapter list = new SimpleCursorAdapter(MainActivity.this, R.layout.line, cursor,
+                    new String[]{"_id", "news_title", "news_content"},
+                    new int[]{R.id.my_id, R.id.my_title, R.id.my_content});
+
+            listView.setAdapter(list);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void inflateListViewSearch(Cursor cursor)  // ①
+    {
+        try {
             SimpleCursorAdapter list = new SimpleCursorAdapter(MainActivity.this, R.layout.line, cursor,
                     new String[]{"_id", "news_title", "news_content"},
                     new int[]{R.id.my_id, R.id.my_title, R.id.my_content});
@@ -129,6 +142,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 tvContent.setText("");
 
                 inflateListView(db);
+                break;
+
+            case R.id.search:
+                Cursor cursor = db.rawQuery(
+                        "select * from news_inf where news_title like ? or news_content like ?",
+                        new String[] { "%" + tvTitle.getText() + "%", "%" + tvTitle.getText() + "%" });
+
+                inflateListViewSearch(cursor);
                 break;
 
             default:
