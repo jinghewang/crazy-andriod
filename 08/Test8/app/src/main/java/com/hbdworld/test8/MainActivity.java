@@ -1,102 +1,117 @@
 package com.hbdworld.test8;
 
-import android.content.SharedPreferences;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     ListView listView;
-    TextView textView;
+    TextView tvContent;
+    TextView tvTitle;
+
     // 记录当前的父文件夹
     File currentParent;
     // 记录当前路径下的所有文件的文件数组
     File[] currentFiles;
+    SQLiteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         //--
-        listView = (ListView) findViewById(R.id.list);
-        textView = (TextView) findViewById(R.id.path);
-        // 获取系统的SD卡的目录
-        File root = new File("/mnt/sdcard/");
-        if (root.exists()) {
-            currentParent = root;
-            currentFiles = root.listFiles();
-            this.inflateListView(currentFiles);
-        }
+        listView = (ListView) findViewById(R.id.show);
+        tvTitle = (TextView) findViewById(R.id.title);
+        tvContent = (TextView) findViewById(R.id.content);
+
+        db = SQLiteDatabase.openOrCreateDatabase(this.getFilesDir() + "/mydb.db", null);
+        this.ensureTable(db);
+
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                File file = currentFiles[position];
-                if (file.isFile()){
-                    showToast("当前是文件");
-                    return;
-                }
-                File[] tmp = file.listFiles();
-                if (tmp == null || tmp.length == 0) {
-                    Toast.makeText(MainActivity.this, "当前路径不可访问或该路径下没有文件", Toast.LENGTH_SHORT).show();
-                } else {
-                    currentParent = file;
-                    currentFiles = tmp;
-                    inflateListView(currentFiles);
+                try {
+                    TextView tv = (TextView) view.findViewById(R.id.my_id);
+                    String s = tv.getText().toString();
+                    Cursor cursor = db.rawQuery("select * from news_inf where _id=?", new String[]{s});
+                    int _id = cursor.getColumnIndex("_id");
+                    int _title = cursor.getColumnIndex("news_title");
+                    int _content = cursor.getColumnIndex("news_content");
+
+                    if (cursor.moveToFirst()) {
+                        tvTitle.setText(cursor.getString(_title));
+                        tvContent.setText(cursor.getString(_content));
+                    }
+                    cursor.close();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });
 
-        this.bindOnClickListener(this, R.id.parent);
+        inflateListView(db);
+
+        this.bindOnClickListener(this, R.id.ok);
     }
 
-    private void inflateListView(File[] files)  // ①
-    {
-        List<Map<String, Object>> listItems = new ArrayList<>();
-        for (File file : files) {
-            Map<String, Object> item = new HashMap<String, Object>();
-            item.put("icon", file.isDirectory() ? R.drawable.folder : R.drawable.file);
-            item.put("fileName", file.getName());
-            listItems.add(item);
+    private void ensureTable(SQLiteDatabase db) {
+
+        try {
+            // 执行DDL创建数据表
+            db.execSQL("create table news_inf(_id integer"
+                    + " primary key autoincrement,"
+                    + " news_title varchar(50),"
+                    + " news_content varchar(255))");
+            // 执行insert语句插入数据
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        ListAdapter list = new SimpleAdapter(this, listItems, R.layout.line, new String[]{"icon", "fileName"}, new int[]{R.id.icon, R.id.file_name});
-        listView.setAdapter(list);
+    }
+
+    private void inflateListView(SQLiteDatabase db2)  // ①
+    {
+        try {
+            Cursor cursor = db.rawQuery("select * from news_inf", new String[]{});
+            SimpleCursorAdapter list = new SimpleCursorAdapter(MainActivity.this, R.layout.line, cursor,
+                    new String[]{"_id", "news_title", "news_content"},
+                    new int[]{R.id.my_id, R.id.my_title, R.id.my_content});
+
+            listView.setAdapter(list);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.parent:
-                try {
-                    if (!currentParent.getCanonicalPath().equals("/mnt/sdcard")) {
-                        // 获取上一级目录
-                        currentParent = currentParent.getParentFile();
-                        // 列出当前目录下所有文件
-                        currentFiles = currentParent.listFiles();
-                        // 再次更新ListView
-                        inflateListView(currentFiles);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            case R.id.ok:
+
+                ContentValues values = new ContentValues();
+                values.put("news_title", tvTitle.getText().toString());
+                values.put("news_content", tvContent.getText().toString());
+                db.insert("news_inf", null, values);
+
+                tvTitle.setText("");
+                tvContent.setText("");
+
+                // 再次更新ListView
+                inflateListView(db);
                 showToast(Integer.valueOf(1).toString());
                 break;
 
@@ -105,6 +120,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (db != null || db.isOpen()) {
+            db.close();
+        }
+    }
 
     public void showToast(String msg) {
         Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
