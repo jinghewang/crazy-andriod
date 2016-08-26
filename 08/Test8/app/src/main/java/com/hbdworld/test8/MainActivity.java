@@ -3,6 +3,7 @@ package com.hbdworld.test8;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -31,6 +33,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     File[] currentFiles;
     SQLiteDatabase db;
 
+    TextToSpeech tts = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +46,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         db = SQLiteDatabase.openOrCreateDatabase(this.getFilesDir() + "/mydb.db", null);
         this.ensureTable(db);
+
+        tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status == TextToSpeech.SUCCESS){
+                    int result = tts.setLanguage(Locale.US);
+                    if (result != TextToSpeech.LANG_COUNTRY_AVAILABLE && result != TextToSpeech.LANG_AVAILABLE) {
+                        showToast("TTS暂时不支持这种语言的朗读。");
+                    }
+                }
+            }
+        });
 
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -69,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         inflateListView(db);
 
-        this.bindOnClickListener(this, R.id.ok, R.id.ok2, R.id.clear, R.id.search);
+        this.bindOnClickListener(this, R.id.ok, R.id.ok2, R.id.clear, R.id.search,R.id.speech);
     }
 
     private void ensureTable(SQLiteDatabase db) {
@@ -155,6 +171,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 inflateListViewSearch(cursor);
                 break;
 
+            case R.id.speech:
+
+                tts.speak(tvTitle.getText(),TextToSpeech.QUEUE_ADD,null,"speech");
+
+
+                break;
+
             default:
                 break;
         }
@@ -163,8 +186,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        //关闭数据库
         if (db != null || db.isOpen()) {
             db.close();
+        }
+
+        // 关闭TextToSpeech对象
+        if (tts != null)
+        {
+            tts.shutdown();
         }
     }
 
