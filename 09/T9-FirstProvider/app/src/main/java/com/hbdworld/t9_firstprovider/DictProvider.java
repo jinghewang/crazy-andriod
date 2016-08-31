@@ -20,27 +20,45 @@ public class DictProvider extends ContentProvider {
     private static final int WORD = 2;
     private MyDatabaseHelper dbOpenHelper;
 
-    static{
-        matcher.addURI(Words.AUTHORITY,"words",WORDS);
-        matcher.addURI(Words.AUTHORITY,"word/#",WORD);
+    static {
+        matcher.addURI(Words.AUTHORITY, "words", WORDS);
+        matcher.addURI(Words.AUTHORITY, "word/#", WORD);
     }
 
     @Override
     public boolean onCreate() {
-        dbOpenHelper = new MyDatabaseHelper(this.getContext(),"myDict.db3",1);
+        dbOpenHelper = new MyDatabaseHelper(this.getContext(), "myDict.db3", 1);
         return true;
     }
 
     @Nullable
     @Override
-    public Cursor query(Uri uri, String[] strings, String s, String[] strings1, String s1) {
-        return null;
+    public Cursor query(Uri uri, String[] projection, String where, String[] whereArgs, String sortOrder) {
+        SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
+        switch (matcher.match(uri)) {
+            case WORDS:
+
+                Cursor c = db.query("dict", projection, where, whereArgs, null, null, sortOrder);
+                return c;
+
+            case WORD:
+                long id = ContentUris.parseId(uri);
+                String whereClause = Words.Word._ID + "=" + id;
+                // 如果原来的where子句存在，拼接where子句
+                if (where != null && !"".equals(where)) {
+                    whereClause = whereClause + " and " + where;
+                }
+                return db.query("dict", projection, whereClause, whereArgs, null, null, sortOrder);
+
+            default:
+                throw new IllegalArgumentException("未知Uri:" + uri);
+        }
     }
 
     @Nullable
     @Override
     public String getType(Uri uri) {
-        switch (matcher.match(uri)){
+        switch (matcher.match(uri)) {
             case WORDS:
                 return "vnd.android.cursor.dir/org.crazyit.dict";
 
@@ -56,12 +74,12 @@ public class DictProvider extends ContentProvider {
     @Override
     public Uri insert(Uri uri, ContentValues contentValues) {
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
-        switch (matcher.match(uri)){
+        switch (matcher.match(uri)) {
             case WORDS:
-                long rowId = db.insert("dict",Words.Word._ID,contentValues);
-                if (rowId>0){
-                    Uri wordUri = ContentUris.withAppendedId(uri,rowId);
-                    this.getContext().getContentResolver().notifyChange(wordUri,null);
+                long rowId = db.insert("dict", Words.Word._ID, contentValues);
+                if (rowId > 0) {
+                    Uri wordUri = ContentUris.withAppendedId(uri, rowId);
+                    this.getContext().getContentResolver().notifyChange(wordUri, null);
                     return wordUri;
                 }
                 break;
@@ -78,8 +96,7 @@ public class DictProvider extends ContentProvider {
         SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
         int num = 0;
         // 对uri进行匹配
-        switch (matcher.match(uri))
-        {
+        switch (matcher.match(uri)) {
             // 如果Uri参数代表操作全部数据项
             case WORDS:
                 num = db.delete("dict", where, whereArgs);
@@ -90,8 +107,7 @@ public class DictProvider extends ContentProvider {
                 long id = ContentUris.parseId(uri);
                 String whereClause = Words.Word._ID + "=" + id;
                 // 如果原来的where子句存在，拼接where子句
-                if (where != null && !where.equals(""))
-                {
+                if (where != null && !where.equals("")) {
                     whereClause = whereClause + " and " + where;
                 }
                 num = db.delete("dict", whereClause, whereArgs);
@@ -109,8 +125,7 @@ public class DictProvider extends ContentProvider {
         SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
         // 记录所修改的记录数
         int num = 0;
-        switch (matcher.match(uri))
-        {
+        switch (matcher.match(uri)) {
             // 如果Uri参数代表操作全部数据项
             case WORDS:
                 num = db.update("dict", values, where, whereArgs);
@@ -121,8 +136,7 @@ public class DictProvider extends ContentProvider {
                 long id = ContentUris.parseId(uri);
                 String whereClause = Words.Word._ID + "=" + id;
                 // 如果原来的where子句存在，拼接where子句
-                if (where != null && !where.equals(""))
-                {
+                if (where != null && !where.equals("")) {
                     whereClause = whereClause + " and " + where;
                 }
                 num = db.update("dict", values, whereClause, whereArgs);

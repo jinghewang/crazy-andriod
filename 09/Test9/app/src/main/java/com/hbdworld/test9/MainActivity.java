@@ -2,6 +2,7 @@ package com.hbdworld.test9;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -9,14 +10,18 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
 
     ContentResolver contentResolver = null;
-    Uri uri = Uri.parse("content://com.hbdworld.t9_firstprovider.FirstProvider/");
     private static final String TAG = "HBD-";
 
     @Override
@@ -24,40 +29,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        Log.w(TAG,"--create--");
+        Log.w(TAG, "--create--");
 
         this.contentResolver = this.getContentResolver();
-        this.bindOnClickListener(this,R.id.query,R.id.insert,R.id.update,R.id.delete);
+        this.bindOnClickListener(this, R.id.insert, R.id.search);
     }
 
     @Override
     public void onClick(View view) {
-        Button btn = (Button)view;
-        switch (btn.getId()){
-            case R.id.query:
-                Cursor c =  this.contentResolver.query(uri,null,"query_where",new String[]{"123","456"},null);
-                showToast("远程ContentProvide-query返回的Cursor为：" + c);
+        Button btn = (Button) view;
+        switch (btn.getId()) {
+            case R.id.search:
+                // 获取用户输入
+                String key = ((EditText) findViewById(R.id.key)).getText().toString();
+                // 执行查询
+                Cursor cursor = contentResolver.query(
+                        Words.Word.DICT_CONTENT_URI, null,
+                        "word like ? or detail like ?", new String[]{
+                                "%" + key + "%", "%" + key + "%"}, null);
+                // 创建一个Bundle对象
+                Bundle data = new Bundle();
+                data.putSerializable("data", converCursorToList(cursor));
+                // 创建一个Intent
+                Intent intent = new Intent(MainActivity.this, ResultActivity.class);
+                intent.putExtras(data);
+                // 启动Activity
+                startActivity(intent);
                 break;
 
             case R.id.insert:
+                String word = ((EditText) findViewById(R.id.word)).getText().toString();
+                String detail = ((EditText) findViewById(R.id.detail)).getText().toString();
+                // 插入生词记录
                 ContentValues values = new ContentValues();
-                values.put("name","wjh");
-                values.put("age",18);
-                Uri newUri =  this.contentResolver.insert(uri,values);
-                showToast("远程ContentProvide-insert返回的Cursor为：" + newUri);
-                break;
-
-            case R.id.update:
-                ContentValues values2 = new ContentValues();
-                values2.put("name", "wjh");
-                values2.put("age", 18);
-                int result = this.contentResolver.update(uri, values2, "update_where", null);
-                showToast("远程ContentProvide-update返回的Cursor为：" + result);
-                break;
-
-            case R.id.delete:
-                int result2 = this.contentResolver.delete(uri, "update_where", null);
-                showToast("远程ContentProvide-delete返回的Cursor为：" + result2);
+                values.put(Words.Word.WORD, word);
+                values.put(Words.Word.DETAIL, detail);
+                Uri result = contentResolver.insert(Words.Word.DICT_CONTENT_URI, values);
+                // 显示提示信息
+                Toast.makeText(MainActivity.this, "添加生词成功！"
+                        , Toast.LENGTH_SHORT).show();
                 break;
 
             default:
@@ -65,6 +75,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
 
+    }
+
+    private ArrayList<Map<String, String>> converCursorToList(Cursor cursor) {
+        ArrayList<Map<String, String>> result = new ArrayList<>();
+        // 遍历Cursor结果集
+        while (cursor.moveToNext()) {
+            // 将结果集中的数据存入ArrayList中
+            Map<String, String> map = new HashMap<>();
+            // 取出查询记录中第2列、第3列的值
+            map.put(Words.Word.WORD, cursor.getString(1));
+            map.put(Words.Word.DETAIL, cursor.getString(2));
+            result.add(map);
+        }
+        return result;
     }
 
     public void showToast(String msg) {

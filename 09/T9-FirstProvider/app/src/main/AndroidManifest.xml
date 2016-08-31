@@ -21,13 +21,13 @@
         <!-- 注册一个ContentProvider -->
         <provider
             android:name=".FirstProvider"
-            android:authorities="com.hbdworld.t9_firstprovider.FirstProvider"
+            android:authorities="com.hbdworld.t9_firstprovider.firstprovider"
             android:exported="true"></provider>
 
         <!-- 注册一个ContentProvider -->
         <provider
             android:name=".DictProvider"
-            android:authorities="com.hbdworld.t9_firstprovider.DictProvider"
+            android:authorities="com.hbdworld.t9_firstprovider.dictprovider"
             android:exported="true"></provider>
 
     </application>
