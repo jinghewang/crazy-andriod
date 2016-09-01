@@ -1,10 +1,12 @@
 package com.hbdworld.test9;
 
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.w(TAG, "--create--");
 
         this.contentResolver = this.getContentResolver();
-        this.bindOnClickListener(this, R.id.insert, R.id.search);
+        this.bindOnClickListener(this, R.id.add, R.id.search);
     }
 
     @Override
@@ -41,15 +43,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (btn.getId()) {
             case R.id.search:
                 // 获取用户输入
-                String key = ((EditText) findViewById(R.id.key)).getText().toString();
                 // 执行查询
-                Cursor cursor = contentResolver.query(
-                        Words.Word.DICT_CONTENT_URI, null,
-                        "word like ? or detail like ?", new String[]{
-                                "%" + key + "%", "%" + key + "%"}, null);
+                Cursor cursor = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+                ArrayList<Map<String, String>> data2 = converCursorToList(cursor);
                 // 创建一个Bundle对象
                 Bundle data = new Bundle();
-                data.putSerializable("data", converCursorToList(cursor));
+                data.putSerializable("data", data2);
                 // 创建一个Intent
                 Intent intent = new Intent(MainActivity.this, ResultActivity.class);
                 intent.putExtras(data);
@@ -57,17 +56,52 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent);
                 break;
 
-            case R.id.insert:
-                String word = ((EditText) findViewById(R.id.word)).getText().toString();
-                String detail = ((EditText) findViewById(R.id.detail)).getText().toString();
-                // 插入生词记录
+            case R.id.add:
+                // 获取程序界面中的三个文本框的内容
+                String name = ((EditText) findViewById(R.id.name))
+                        .getText().toString();
+                String phone = ((EditText) findViewById(R.id.phone))
+                        .getText().toString();
+                String email = ((EditText) findViewById(R.id.email))
+                        .getText().toString();
+                // 创建一个空的ContentValues
                 ContentValues values = new ContentValues();
-                values.put(Words.Word.WORD, word);
-                values.put(Words.Word.DETAIL, detail);
-                Uri result = contentResolver.insert(Words.Word.DICT_CONTENT_URI, values);
-                // 显示提示信息
-                Toast.makeText(MainActivity.this, "添加生词成功！"
-                        , Toast.LENGTH_SHORT).show();
+                // 向RawContacts.CONTENT_URI执行一个空值插入
+                // 目的是获取系统返回的rawContactId
+                Uri rawContactUri = getContentResolver().insert(
+                        ContactsContract.RawContacts.CONTENT_URI, values);
+                long rawContactId = ContentUris.parseId(rawContactUri);
+                values.clear();
+                values.put(ContactsContract.RawContacts.Data.RAW_CONTACT_ID, rawContactId);
+                // 设置内容类型
+                values.put(ContactsContract.RawContacts.Data.MIMETYPE, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE);
+                // 设置联系人名字
+                values.put(ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME, name);
+                // 向联系人URI添加联系人名字
+                getContentResolver().insert(android.provider.ContactsContract
+                        .Data.CONTENT_URI, values);
+                values.clear();
+                values.put(ContactsContract.RawContacts.Data.RAW_CONTACT_ID, rawContactId);
+                values.put(ContactsContract.RawContacts.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
+                // 设置联系人的电话号码
+                values.put(ContactsContract.CommonDataKinds.Phone.NUMBER, phone);
+                // 设置电话类型
+                values.put(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE);
+                // 向联系人电话号码URI添加电话号码
+                getContentResolver().insert(android.provider.ContactsContract
+                        .Data.CONTENT_URI, values);
+                values.clear();
+                values.put(ContactsContract.RawContacts.Data.RAW_CONTACT_ID, rawContactId);
+                values.put(ContactsContract.RawContacts.Data.MIMETYPE, ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE);
+                // 设置联系人的E-mail地址
+                values.put(ContactsContract.CommonDataKinds.Email.DATA, email);
+                // 设置该电子邮件的类型
+                values.put(ContactsContract.CommonDataKinds.Email.TYPE, ContactsContract.CommonDataKinds.Email.TYPE_WORK);
+                // 向联系人E-mail URI添加E-mail数据
+                getContentResolver().insert(android.provider.ContactsContract
+                        .Data.CONTENT_URI, values);
+                Toast.makeText(MainActivity.this, "联系人数据添加成功",
+                        Toast.LENGTH_SHORT).show();
                 break;
 
             default:
