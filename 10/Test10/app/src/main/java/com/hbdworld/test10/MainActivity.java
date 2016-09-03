@@ -1,6 +1,10 @@
 package com.hbdworld.test10;
 
+import android.app.Service;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,25 +14,43 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    BindService.MyBinder binder;
+    private ServiceConnection conn = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder service) {
+            System.out.println("--Service Connected--");
+            binder = (BindService.MyBinder) service;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            System.out.println("--Service Disconnected--");
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        this.bindOnClickListener(this, R.id.start, R.id.stop);
+        this.bindOnClickListener(this,R.id.bind, R.id.unbind, R.id.getServiceStatus);
     }
 
     @Override
     public void onClick(View view) {
         showToast("----onClick:" + view.getId());
         Button btn = (Button) view;
-        Intent intent = new Intent(MainActivity.this, FirstService.class);
+        Intent intent = new Intent(MainActivity.this, BindService.class);
         switch (btn.getId()) {
-            case R.id.start:
-                startService(intent);
+            case R.id.bind:
+                boolean result = bindService(intent, conn, Service.BIND_AUTO_CREATE);
                 break;
 
-            case R.id.stop:
-                stopService(intent);
+            case R.id.unbind:
+                unbindService(conn);
+                break;
+
+            case R.id.getServiceStatus:
+                Toast.makeText(MainActivity.this, "Service的count值为：" + binder.getCount(), Toast.LENGTH_SHORT).show();  // ②
                 break;
 
             default:

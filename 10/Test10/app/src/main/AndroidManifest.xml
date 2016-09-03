@@ -15,6 +15,7 @@
             </intent-filter>
         </activity>
         <service android:name=".FirstService"></service>
+        <service android:name=".BindService"></service>
 
     </application>
 
