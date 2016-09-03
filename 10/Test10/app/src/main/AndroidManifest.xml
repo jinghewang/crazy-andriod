@@ -16,6 +16,8 @@
         </activity>
         <service android:name=".FirstService"></service>
         <service android:name=".BindService"></service>
+        <service android:name=".MyService"></service>
+        <service android:name=".MyIntentService"></service>
 
     </application>
 

@@ -14,43 +14,30 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    BindService.MyBinder binder;
-    private ServiceConnection conn = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder service) {
-            System.out.println("--Service Connected--");
-            binder = (BindService.MyBinder) service;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            System.out.println("--Service Disconnected--");
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        this.bindOnClickListener(this,R.id.bind, R.id.unbind, R.id.getServiceStatus);
+        this.bindOnClickListener(this, R.id.bind, R.id.unbind, R.id.getServiceStatus, R.id.start, R.id.start2);
     }
 
     @Override
     public void onClick(View view) {
-        showToast("----onClick:" + view.getId());
+        //showToast("----onClick:" + view.getId());
         Button btn = (Button) view;
-        Intent intent = new Intent(MainActivity.this, BindService.class);
+        Intent intent = null;
         switch (btn.getId()) {
-            case R.id.bind:
-                boolean result = bindService(intent, conn, Service.BIND_AUTO_CREATE);
+            case R.id.start:
+                intent = new Intent(MainActivity.this, MyService.class);
+                startService(intent);
+                showToast(btn.getText().toString());
                 break;
 
-            case R.id.unbind:
-                unbindService(conn);
-                break;
-
-            case R.id.getServiceStatus:
-                Toast.makeText(MainActivity.this, "Service的count值为：" + binder.getCount(), Toast.LENGTH_SHORT).show();  // ②
+            case R.id.start2:
+                intent = new Intent(MainActivity.this, MyIntentService.class);
+                startService(intent);
+                showToast(btn.getText().toString());
                 break;
 
             default:
