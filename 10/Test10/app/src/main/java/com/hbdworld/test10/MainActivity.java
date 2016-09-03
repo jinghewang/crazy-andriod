@@ -14,8 +14,17 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.internal.*;
-
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -23,42 +32,8 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
 
-    TelephonyManager tManager;
-    CustomPhoneCallListener cpListener;
     ArrayList<String> blockList = new ArrayList<>();
 
-    public class CustomPhoneCallListener extends PhoneStateListener {
-        @Override
-        public void onCallStateChanged(int state, String number) {
-            switch (state) {
-                case TelephonyManager.CALL_STATE_IDLE:
-                    break;
-
-                case TelephonyManager.CALL_STATE_OFFHOOK:
-                    break;
-
-                case TelephonyManager.CALL_STATE_RINGING:
-                    if (isBlock(number)) {
-                        try {
-                            Method method = Class.forName("android.os.ServiceManager").getMethod("getService", String.class);
-                            IBinder binder = (IBinder) method.invoke(null, new Object[]{TELEPHONY_SERVICE});
-                            //ITelephony telephony = ITelephony.Stub.asInterface(binder);
-                            //telephony.endCall();
-                        } catch (NoSuchMethodException e) {
-                            e.printStackTrace();
-                        } catch (ClassNotFoundException e) {
-                            e.printStackTrace();
-                        } catch (InvocationTargetException e) {
-                            e.printStackTrace();
-                        } catch (IllegalAccessException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    break;
-            }
-            super.onCallStateChanged(state, number);
-        }
-    }
 
     // 判断某个电话号码是否在黑名单之内
     public boolean isBlock(String phone) {
@@ -74,23 +49,51 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        //--
-        this.tManager = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
-        this.cpListener = new CustomPhoneCallListener();
-        tManager.listen(cpListener,PhoneStateListener.LISTEN_CALL_STATE);
-        this.bindOnClickListener(this, R.id.managerBlock);
+        this.bindOnClickListener(this, R.id.read, R.id.write);
     }
 
     @Override
     public void onClick(View view) {
         //showToast("----onClick:" + view.getId());
         Button btn = (Button) view;
+        TextView textView = (TextView)this.findViewById(R.id.msg);
+        String fileName = getFilesDir() + "hbd.txt";
         Intent intent = null;
+        String content = "";
         switch (btn.getId()) {
-            case R.id.managerBlock:
-                intent = new Intent(MainActivity.this, MyService.class);
-                startService(intent);
-                showToast(btn.getText().toString());
+            case R.id.read:
+                try {
+                    InputStream instream = new FileInputStream("hbd.txt");
+                    if (instream != null)
+                    {
+                        InputStreamReader inputreader = new InputStreamReader(instream);
+                        BufferedReader buffreader = new BufferedReader(inputreader);
+                        String line;
+                        //分行读取
+                        while (( line = buffreader.readLine()) != null) {
+                            content += line + "\n";
+                        }
+                        instream.close();
+                    }
+                    textView.setText(content);
+                    showToast("读取成功");
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
+
+            case R.id.write:
+                try {
+                    FileOutputStream fos = openFileOutput("hbd.txt", MODE_APPEND);
+                    PrintStream ps = new PrintStream(fos);
+                    ps.println(String.valueOf(System.currentTimeMillis()));
+                    ps.close();
+                    showToast("写入成功");
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
                 break;
 
             default:
