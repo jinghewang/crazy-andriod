@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        this.bindOnClickListener(this, R.id.play,R.id.stop);
+        this.bindOnClickListener(this, R.id.play,R.id.stop,R.id.send,R.id.send2);
     }
 
 
@@ -63,18 +63,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button btn = (Button) view;
         Intent intent = null;
         switch (btn.getId()) {
-            case R.id.play:
+            case R.id.send:
                 intent = new Intent(MainActivity.this, MyReceiver.class);
                 intent.putExtra("msg","hello world");
                 this.sendBroadcast(intent);
                 showToast("发送成功");
                 break;
 
-            case R.id.stop:
+            case R.id.send2:
                 intent = new Intent();
                 intent.setAction("com.hbdworld.action.ACTION_RECEIVER");
                 intent.putExtra("msg","hello world2");
-                this.sendBroadcast(intent);
+                this.sendOrderedBroadcast(intent,null);
                 showToast("发送成功2");
                 break;
 

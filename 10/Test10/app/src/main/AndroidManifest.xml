@@ -29,12 +29,21 @@
             android:name=".MyReceiver"
             android:enabled="true"
             android:exported="true">
-            <intent-filter>
+            <intent-filter android:priority="20">
                 <action android:name="com.hbdworld.action.ACTION_RECEIVER" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
+        <receiver
+            android:name=".MyReceiver2"
+            android:enabled="true"
+            android:exported="true">
+           <intent-filter android:priority="0">
+               <action android:name="com.hbdworld.action.ACTION_RECEIVER" />
+               <category android:name="android.intent.category.DEFAULT" />
+           </intent-filter>
+        </receiver>
+
         <receiver
             android:name=".ActivityReceiver"
             android:enabled="true"
@@ -43,7 +52,9 @@
         <service
             android:name=".MusicService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
+
+
     </application>
 
 </manifest>
