@@ -1,6 +1,9 @@
 package com.hbdworld.test10;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.app.TimePickerDialog;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -10,6 +13,7 @@ import android.media.TimedText;
 import android.net.rtp.AudioStream;
 import android.os.IBinder;
 import android.os.Vibrator;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.PhoneStateListener;
@@ -21,6 +25,7 @@ import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -38,6 +43,7 @@ import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     AudioManager audioManager;
     MediaPlayer mediaPlayer;
     Vibrator vibrator;
+    Calendar calendar = Calendar.getInstance();
+    AlarmManager alarmManager;
 
     boolean isMute = false;
 
@@ -58,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
         mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.earth);
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+        alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
 
         mediaPlayer.setOnTimedTextListener(new MediaPlayer.OnTimedTextListener() {
             @Override
@@ -75,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        this.bindOnClickListener(this, R.id.play, R.id.stop, R.id.up, R.id.down, R.id.mute, R.id.vibrator);
+        this.bindOnClickListener(this, R.id.play, R.id.stop, R.id.up, R.id.down, R.id.mute, R.id.vibrator, R.id.setTime);
     }
 
 
@@ -103,6 +112,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.vibrator:
                 showToast("振动2秒");
                 vibrator.vibrate(2000);
+                break;
+
+
+            case R.id.setTime:
+                final Calendar currentTime = Calendar.getInstance();
+                new TimePickerDialog(MainActivity.this, 0, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        showToast(String.format("hour:%d  minute:%d",hourOfDay,minute));
+                        Calendar c = Calendar.getInstance();
+                        c.setTimeInMillis(System.currentTimeMillis());
+                        c.set(Calendar.HOUR,hourOfDay);
+                        c.set(Calendar.MINUTE,minute);
+                        Intent intent = new Intent(MainActivity.this,AlarmActivity.class) ;
+                        PendingIntent pendingIntent =  PendingIntent.getActivity(MainActivity.this,1,intent,0);
+                        alarmManager.set(AlarmManager.RTC_WAKEUP,c.getTimeInMillis(),pendingIntent);
+                        showToast("设置闹钟成功");
+                    }
+                }, currentTime.get(Calendar.HOUR_OF_DAY), currentTime.get(Calendar.MINUTE), false).show();
                 break;
 
             default:
