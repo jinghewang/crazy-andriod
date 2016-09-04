@@ -15,16 +15,16 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:id="@+id/play"
+            android:id="@+id/send"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="播放" />
+            android:text="发送" />
 
         <Button
-            android:id="@+id/stop"
+            android:id="@+id/send2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="停止" />
+            android:text="发送2" />
 
     </LinearLayout>
 </LinearLayout>

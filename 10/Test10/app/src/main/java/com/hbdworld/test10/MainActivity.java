@@ -49,57 +49,40 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-
-    AudioManager audioManager;
-    MediaPlayer mediaPlayer;
-    Vibrator vibrator;
-    Calendar calendar = Calendar.getInstance();
-    AlarmManager alarmManager;
-
-    boolean isMute = false;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
-        mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.earth);
-        vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-
-
-        this.bindOnClickListener(this, R.id.play, R.id.stop);
+        this.bindOnClickListener(this, R.id.send,R.id.send2);
     }
 
 
     @Override
     public void onClick(View view) {
-        //showToast("----onClick:" + view.getId());
         Button btn = (Button) view;
-        Intent intent = new Intent(MainActivity.this, ChangeService.class);
-        PendingIntent pi = PendingIntent.getService(MainActivity.this, 1, intent, 0);
+        Intent intent = null;
         switch (btn.getId()) {
-            case R.id.play:
-                alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, 0, 5000, pi);
-                showToast("play操作成功");
+            case R.id.send:
+                intent = new Intent(MainActivity.this, MyReceiver.class);
+                intent.putExtra("msg","hello world");
+                this.sendBroadcast(intent);
+                showToast("发送成功");
                 break;
 
-            case R.id.stop:
-                alarmManager.cancel(pi);
-                showToast("stop操作成功");
+            case R.id.send2:
+                intent = new Intent();
+                intent.setAction("com.hbdworld.action.ACTION_RECEIVER");
+                intent.putExtra("msg","hello world2");
+                this.sendBroadcast(intent);
+                showToast("发送成功2");
                 break;
+
             default:
                 break;
         }
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        showToast("手机振动");
-        vibrator.vibrate(1000);
-        return super.onTouchEvent(event);
-    }
 
     public void showToast(String msg) {
         Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();

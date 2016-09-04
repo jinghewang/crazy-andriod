@@ -9,7 +9,7 @@
     <!-- 授予程序访问振动器的权限 -->
     <uses-permission android:name="android.permission.VIBRATE" />
     <!-- 授予用户修改壁纸的权限 -->
-    <uses-permission android:name="android.permission.SET_WALLPAPER"/>
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
 
     <application
         android:allowBackup="true"
@@ -20,16 +20,20 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AlarmActivity" />
 
-        <service
-            android:name=".ChangeService"
+        <receiver
+            android:name=".MyReceiver"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.hbdworld.action.ACTION_RECEIVER"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+
+        </receiver>
     </application>
 
 </manifest>
