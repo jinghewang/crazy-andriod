@@ -9,10 +9,12 @@ import android.media.MediaPlayer;
 import android.media.TimedText;
 import android.net.rtp.AudioStream;
 import android.os.IBinder;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -43,36 +45,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     AudioManager audioManager;
-    MediaPlayer mediaPlayer ;
-    boolean isMute = false;
+    MediaPlayer mediaPlayer;
+    Vibrator vibrator;
 
+    boolean isMute = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        audioManager = (AudioManager)getSystemService(AUDIO_SERVICE);
-        mediaPlayer = MediaPlayer.create(MainActivity.this,R.raw.earth);
+        audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+        mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.earth);
+        vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
         mediaPlayer.setOnTimedTextListener(new MediaPlayer.OnTimedTextListener() {
             @Override
             public void onTimedText(MediaPlayer mediaPlayer, TimedText timedText) {
-                showToast(""+ timedText);
+                showToast("" + timedText);
             }
         });
 
 
-
-        ToggleButton toggleButton = (ToggleButton)this.findViewById(R.id.mute);
+        ToggleButton toggleButton = (ToggleButton) this.findViewById(R.id.mute);
         toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                audioManager.setStreamMute(AudioManager.STREAM_MUSIC,checked);
+                audioManager.setStreamMute(AudioManager.STREAM_MUSIC, checked);
             }
         });
 
-        this.bindOnClickListener(this,R.id.play,R.id.stop,R.id.up,R.id.down,R.id.mute);
+        this.bindOnClickListener(this, R.id.play, R.id.stop, R.id.up, R.id.down, R.id.mute, R.id.vibrator);
     }
 
 
@@ -90,11 +93,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.up:
-                audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC,AudioManager.ADJUST_RAISE,AudioManager.FLAG_SHOW_UI);
+                audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, AudioManager.FLAG_SHOW_UI);
                 break;
 
             case R.id.down:
-                audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC,AudioManager.ADJUST_LOWER,AudioManager.FLAG_SHOW_UI);
+                audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, AudioManager.FLAG_SHOW_UI);
+                break;
+
+            case R.id.vibrator:
+                showToast("振动2秒");
+                vibrator.vibrate(2000);
                 break;
 
             default:
@@ -102,6 +110,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        showToast("手机振动");
+        vibrator.vibrate(1000);
+        return super.onTouchEvent(event);
+    }
 
     public void showToast(String msg) {
         Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();

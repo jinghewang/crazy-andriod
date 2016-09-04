@@ -10,6 +10,13 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.hbdworld.test10.MainActivity">
 
+
+    <Button
+        android:id="@+id/vibrator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="震动" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
