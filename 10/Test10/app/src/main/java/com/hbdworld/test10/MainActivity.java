@@ -66,25 +66,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
         mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.earth);
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-        alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
-
-        mediaPlayer.setOnTimedTextListener(new MediaPlayer.OnTimedTextListener() {
-            @Override
-            public void onTimedText(MediaPlayer mediaPlayer, TimedText timedText) {
-                showToast("" + timedText);
-            }
-        });
+        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
 
-        ToggleButton toggleButton = (ToggleButton) this.findViewById(R.id.mute);
-        toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                audioManager.setStreamMute(AudioManager.STREAM_MUSIC, checked);
-            }
-        });
-
-        this.bindOnClickListener(this, R.id.play, R.id.stop, R.id.up, R.id.down, R.id.mute, R.id.vibrator, R.id.setTime);
+        this.bindOnClickListener(this, R.id.play, R.id.stop);
     }
 
 
@@ -92,47 +77,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         //showToast("----onClick:" + view.getId());
         Button btn = (Button) view;
+        Intent intent = new Intent(MainActivity.this, ChangeService.class);
+        PendingIntent pi = PendingIntent.getService(MainActivity.this, 1, intent, 0);
         switch (btn.getId()) {
             case R.id.play:
-                mediaPlayer.start();
+                alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, 0, 5000, pi);
+                showToast("play操作成功");
                 break;
 
             case R.id.stop:
-                mediaPlayer.stop();
+                alarmManager.cancel(pi);
+                showToast("stop操作成功");
                 break;
-
-            case R.id.up:
-                audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, AudioManager.FLAG_SHOW_UI);
-                break;
-
-            case R.id.down:
-                audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, AudioManager.FLAG_SHOW_UI);
-                break;
-
-            case R.id.vibrator:
-                showToast("振动2秒");
-                vibrator.vibrate(2000);
-                break;
-
-
-            case R.id.setTime:
-                final Calendar currentTime = Calendar.getInstance();
-                new TimePickerDialog(MainActivity.this, 0, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        showToast(String.format("hour:%d  minute:%d",hourOfDay,minute));
-                        Calendar c = Calendar.getInstance();
-                        c.setTimeInMillis(System.currentTimeMillis());
-                        c.set(Calendar.HOUR,hourOfDay);
-                        c.set(Calendar.MINUTE,minute);
-                        Intent intent = new Intent(MainActivity.this,AlarmActivity.class) ;
-                        PendingIntent pendingIntent =  PendingIntent.getActivity(MainActivity.this,1,intent,0);
-                        alarmManager.set(AlarmManager.RTC_WAKEUP,c.getTimeInMillis(),pendingIntent);
-                        showToast("设置闹钟成功");
-                    }
-                }, currentTime.get(Calendar.HOUR_OF_DAY), currentTime.get(Calendar.MINUTE), false).show();
-                break;
-
             default:
                 break;
         }
