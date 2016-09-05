@@ -12,9 +12,10 @@
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
     <!-- 授予应用程序访问系统开机事件的权限 -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.BATTERY_STATS" />
 
-    <uses-permission android:name="android.permission.BATTERY_STATS"/>
-
+    <!-- 授予程序接收短信的权限 -->
+    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
 
     <application
         android:allowBackup="true"
@@ -48,7 +49,15 @@
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.BATTERY_CHANGED_2"></action>
+                <action android:name="android.intent.action.BATTERY_CHANGED_2" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".SmsReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
     </application>

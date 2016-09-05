@@ -24,9 +24,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-
-        registerReceiver(new BatteryReceiver(),new IntentFilter("android.intent.action.BATTERY_CHANGED"));
-
         this.bindOnClickListener(this, R.id.play, R.id.stop,R.id.battery);
     }
 
