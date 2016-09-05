@@ -6,18 +6,21 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.UTFDataFormatException;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     // 获取界面中显示歌曲标题、作者文本框
     TextView title, author;
     // 播放/暂停、停止按钮
-    ImageButton play, stop;
+    ImageButton play, stop, next, pre;
     ActivityReceiver activityReceiver;
     public static final String CTL_ACTION = "org.crazyit.action.CTL_ACTION";
     public static final String UPDATE_ACTION = "org.crazyit.action.UPDATE_ACTION";
@@ -26,6 +29,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     String[] titleStrs = new String[]{"心愿", "约定", "美丽新世界"};
     String[] authorStrs = new String[]{"未知艺术家", "周蕙", "伍佰"};
 
+    public static final String TAG = "HBD-";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,43 +38,91 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         title = (TextView) findViewById(R.id.title);
         author = (TextView) findViewById(R.id.author);
+        play = (ImageButton) findViewById(R.id.play);
+        stop = (ImageButton) findViewById(R.id.stop);
+        next = (ImageButton) findViewById(R.id.next);
+        pre = (ImageButton) findViewById(R.id.pre);
 
         //receiver
         activityReceiver = new ActivityReceiver();
-        IntentFilter filter =  new IntentFilter();
+        IntentFilter filter = new IntentFilter();
         filter.addAction(UPDATE_ACTION);
-        registerReceiver(activityReceiver,filter);
+        registerReceiver(activityReceiver, filter);
 
         //service
-        Intent intent = new Intent(MainActivity.this,MusicService.class);
+        Intent intent = new Intent(MainActivity.this, MusicService.class);
         startService(intent);
 
-        this.bindOnClickListener(this, R.id.play,R.id.stop);
+        this.bindOnClickListener(this, R.id.play, R.id.stop, R.id.next, R.id.pre);
     }
 
 
-    public class ActivityReceiver extends BroadcastReceiver{
+    public class ActivityReceiver extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {
 
+            int updata = intent.getIntExtra("update", -1);
+            int current = intent.getIntExtra("current", -1);
+            if (current >= 0) {
+                title.setText(titleStrs[current]);
+                author.setText(authorStrs[current]);
+            }
+
+            Log.e(MainActivity.TAG, "ActivityReceiver-onReceive");
+            Log.e(MainActivity.TAG, "updata:" + updata);
+            Log.e(MainActivity.TAG, "current:" + current);
+
+            switch (updata) {
+                case 0x11:
+                    play.setImageResource(R.drawable.play);
+                    status = 0x11;
+                    break;
+
+                case 0x12:
+                    play.setImageResource(R.drawable.pause);
+                    status = 0x12;
+                    break;
+
+                case 0x13:
+                    play.setImageResource(R.drawable.play);
+                    status = 0x13;
+                    break;
+
+                default:
+                    status = updata;
+                    break;
+            }
         }
     }
 
     @Override
     public void onClick(View view) {
-        Button btn = (Button) view;
+        ImageButton btn = (ImageButton) view;
         Intent intent = null;
+        intent = new Intent(CTL_ACTION);
         switch (btn.getId()) {
             case R.id.play:
+                intent.putExtra("control", 1);
                 break;
 
             case R.id.stop:
+                intent.putExtra("control", 2);
+                break;
+
+            case R.id.next:
+                intent.putExtra("control", 3);
+                break;
+
+            case R.id.pre:
+                intent.putExtra("control", 4);
                 break;
 
             default:
                 break;
         }
+        sendBroadcast(intent);
+        Log.e(MainActivity.TAG, "ActivityReceiver-sendBroadcast");
     }
 
 
