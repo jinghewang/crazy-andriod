@@ -17,18 +17,6 @@ import java.io.UTFDataFormatException;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    // 获取界面中显示歌曲标题、作者文本框
-    TextView title, author;
-    // 播放/暂停、停止按钮
-    ImageButton play, stop, next, pre;
-    ActivityReceiver activityReceiver;
-    public static final String CTL_ACTION = "org.crazyit.action.CTL_ACTION";
-    public static final String UPDATE_ACTION = "org.crazyit.action.UPDATE_ACTION";
-    // 定义音乐的播放状态，0x11代表没有播放；0x12代表正在播放；0x13代表暂停
-    int status = 0x11;
-    String[] titleStrs = new String[]{"心愿", "约定", "美丽新世界"};
-    String[] authorStrs = new String[]{"未知艺术家", "周蕙", "伍佰"};
-
     public static final String TAG = "HBD-";
 
     @Override
@@ -36,93 +24,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        title = (TextView) findViewById(R.id.title);
-        author = (TextView) findViewById(R.id.author);
-        play = (ImageButton) findViewById(R.id.play);
-        stop = (ImageButton) findViewById(R.id.stop);
-        next = (ImageButton) findViewById(R.id.next);
-        pre = (ImageButton) findViewById(R.id.pre);
-
-        //receiver
-        activityReceiver = new ActivityReceiver();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(UPDATE_ACTION);
-        registerReceiver(activityReceiver, filter);
-
-        //service
-        Intent intent = new Intent(MainActivity.this, MusicService.class);
-        startService(intent);
-
-        this.bindOnClickListener(this, R.id.play, R.id.stop, R.id.next, R.id.pre);
+        this.bindOnClickListener(this, R.id.play, R.id.stop);
     }
 
-
-    public class ActivityReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-            int updata = intent.getIntExtra("update", -1);
-            int current = intent.getIntExtra("current", -1);
-            if (current >= 0) {
-                title.setText(titleStrs[current]);
-                author.setText(authorStrs[current]);
-            }
-
-            Log.e(MainActivity.TAG, "ActivityReceiver-onReceive");
-            Log.e(MainActivity.TAG, "updata:" + updata);
-            Log.e(MainActivity.TAG, "current:" + current);
-
-            switch (updata) {
-                case 0x11:
-                    play.setImageResource(R.drawable.play);
-                    status = 0x11;
-                    break;
-
-                case 0x12:
-                    play.setImageResource(R.drawable.pause);
-                    status = 0x12;
-                    break;
-
-                case 0x13:
-                    play.setImageResource(R.drawable.play);
-                    status = 0x13;
-                    break;
-
-                default:
-                    status = updata;
-                    break;
-            }
-        }
-    }
 
     @Override
     public void onClick(View view) {
-        ImageButton btn = (ImageButton) view;
-        Intent intent = null;
-        intent = new Intent(CTL_ACTION);
+        Button btn = (Button) view;
+        Intent intent = new Intent(MainActivity.this,LaunchReceiver.class);
         switch (btn.getId()) {
             case R.id.play:
-                intent.putExtra("control", 1);
+                intent.putExtra("control", "start");
                 break;
 
             case R.id.stop:
-                intent.putExtra("control", 2);
-                break;
-
-            case R.id.next:
-                intent.putExtra("control", 3);
-                break;
-
-            case R.id.pre:
-                intent.putExtra("control", 4);
+                intent.putExtra("control", "stop");
                 break;
 
             default:
                 break;
         }
         sendBroadcast(intent);
-        Log.e(MainActivity.TAG, "ActivityReceiver-sendBroadcast");
     }
 
 
