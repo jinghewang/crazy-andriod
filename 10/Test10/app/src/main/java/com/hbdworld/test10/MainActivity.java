@@ -24,7 +24,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        this.bindOnClickListener(this, R.id.play, R.id.stop);
+
+        registerReceiver(new BatteryReceiver(),new IntentFilter("android.intent.action.BATTERY_CHANGED"));
+
+        this.bindOnClickListener(this, R.id.play, R.id.stop,R.id.battery);
     }
 
 
@@ -41,6 +44,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 intent.putExtra("control", "stop");
                 break;
 
+            case R.id.battery:
+                intent = new Intent("android.intent.action.BATTERY_CHANGED");
+                intent.putExtra("control", "stop");
+                break;
             default:
                 break;
         }
