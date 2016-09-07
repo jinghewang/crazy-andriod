@@ -16,6 +16,10 @@
 
     <!-- 授予程序接收短信的权限 -->
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <!-- 授予该程序使用摄像头的权限 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!--  授权访问互联网-->
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -31,35 +35,6 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name=".LaunchService"
-            android:enabled="true"
-            android:exported="true" />
-
-        <receiver
-            android:name=".LaunchReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-        <receiver
-            android:name=".BatteryReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.BATTERY_CHANGED_2" />
-            </intent-filter>
-        </receiver>
-        <receiver
-            android:name=".SmsReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
-            </intent-filter>
-        </receiver>
     </application>
 
 </manifest>

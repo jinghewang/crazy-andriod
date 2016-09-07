@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,7 +14,13 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.UTFDataFormatException;
+import java.net.Socket;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -23,32 +30,50 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        //--
 
-        this.bindOnClickListener(this, R.id.play, R.id.stop,R.id.battery);
+
+        //--
+        bindOnClickListener(this, R.id.play, R.id.stop, R.id.battery);
     }
 
 
     @Override
     public void onClick(View view) {
         Button btn = (Button) view;
-        Intent intent = new Intent(MainActivity.this,LaunchReceiver.class);
         switch (btn.getId()) {
             case R.id.play:
-                intent.putExtra("control", "start");
+
+                new Thread() {
+                    @Override
+                    public void run() {
+                        Looper.prepare();
+                        try {
+                            Socket socket = new Socket("192.168.89.28", 30000);
+                            InputStream is = socket.getInputStream();
+                            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                            String line = br.readLine();
+                            Log.e(TAG, line);
+                            showToast(line);
+                            br.close();
+                            socket.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        Looper.loop();
+                    }
+                }.start();
+
                 break;
 
             case R.id.stop:
-                intent.putExtra("control", "stop");
                 break;
 
             case R.id.battery:
-                intent = new Intent("android.intent.action.BATTERY_CHANGED");
-                intent.putExtra("control", "stop");
                 break;
             default:
                 break;
         }
-        sendBroadcast(intent);
     }
 
 
