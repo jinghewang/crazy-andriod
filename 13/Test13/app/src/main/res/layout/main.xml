@@ -35,12 +35,21 @@
     </LinearLayout>
 
     <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+
+        <ImageView
+            android:id="@+id/show"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter"
+            />
+
         <!-- 定义一个文本框，它用于显示来自服务器的信息 -->
         <TextView
-            android:id="@+id/show"
+            android:id="@+id/show2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#ffff"

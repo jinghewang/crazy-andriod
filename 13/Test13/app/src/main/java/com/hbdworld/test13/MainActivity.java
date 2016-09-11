@@ -1,13 +1,35 @@
 package com.hbdworld.test13;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+
+    ImageView show = null;
+    Bitmap bitmap;
+    Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what== 0x123){
+                show.setImageBitmap(bitmap);
+            }
+        }
+    };
 
 
     @Override
@@ -15,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         //--
-
+        show = (ImageView) this.findViewById(R.id.show);
 
 
         //--
@@ -28,6 +50,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button btn = (Button) view;
         switch (btn.getId()) {
             case R.id.play:
+
+                new Thread(){
+                    @Override
+                    public void run() {
+                        try {
+                            URL url = new URL("http://f.hiphotos.baidu.com/image/pic/item/5d6034a85edf8db12e7bfe7a0b23dd54564e7453.jpg");
+                            InputStream is = url.openStream();
+                            bitmap = BitmapFactory.decodeStream(is);
+                            handler.sendEmptyMessage(0x123);
+                            is.close();
+                        } catch (MalformedURLException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }.start();
+                showToast("操作成功");
 
                 break;
 
