@@ -25,11 +25,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     ImageView show = null;
     Bitmap bitmap;
+    String response;
+    TextView textShow;
+
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == 0x123) {
-                show.setImageBitmap(bitmap);
+                //show.setImageBitmap(bitmap);
+                textShow.setText(response);
             }
         }
     };
@@ -41,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.main);
         //--
         show = (ImageView) this.findViewById(R.id.show);
-
+        textShow = (TextView) this.findViewById(R.id.text_show);
 
         //--
         bindOnClickListener(this, R.id.play, R.id.save, R.id.play2);
@@ -120,6 +124,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }.start();
                 showToast("操作成功2");
 
+                break;
+
+            case R.id.get:
+
+                new Thread()
+                {
+                    @Override
+                    public void run()
+                    {
+                        response = GetPostUtil.sendGet(
+                                "http://192.168.1.88:8888/abc/a.jsp"
+                                , null);
+                        // 发送消息通知UI线程更新UI组件
+                        handler.sendEmptyMessage(0x123);
+                    }
+                }.start();
+
+                break;
+
+            case R.id.post:
+                new Thread()
+                {
+                    @Override
+                    public void run()
+                    {
+                        response = GetPostUtil.sendPost(
+                                "http://192.168.1.88:8888/abc/login.jsp"
+                                , "name=crazyit.org&pass=leegang");
+                    }
+                }.start();
+                // 发送消息通知UI线程更新UI组件
+                handler.sendEmptyMessage(0x123);
                 break;
 
             default:
