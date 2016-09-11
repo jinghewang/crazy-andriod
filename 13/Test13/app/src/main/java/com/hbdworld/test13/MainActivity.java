@@ -12,8 +12,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -22,10 +25,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     ImageView show = null;
     Bitmap bitmap;
-    Handler handler = new Handler(){
+    Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what== 0x123){
+            if (msg.what == 0x123) {
                 show.setImageBitmap(bitmap);
             }
         }
@@ -41,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         //--
-        bindOnClickListener(this, R.id.play, R.id.stop);
+        bindOnClickListener(this, R.id.play, R.id.save, R.id.play2);
     }
 
 
@@ -51,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (btn.getId()) {
             case R.id.play:
 
-                new Thread(){
+                new Thread() {
                     @Override
                     public void run() {
                         try {
@@ -71,7 +74,52 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 break;
 
-            case R.id.stop:
+            case R.id.save:
+
+                new Thread() {
+                    @Override
+                    public void run() {
+                        try {
+                            URL url = new URL("http://f.hiphotos.baidu.com/image/pic/item/5d6034a85edf8db12e7bfe7a0b23dd54564e7453.jpg");
+                            InputStream inputStream = url.openStream();
+                            OutputStream fos = openFileOutput("crazyit.png", MODE_APPEND);
+                            int hasRead = 0;
+                            byte[] buff = new byte[1024];
+                            while ((hasRead = inputStream.read(buff)) > 0) {
+                                fos.write(buff, 0, hasRead);
+                            }
+                            fos.close();
+                            inputStream.close();
+                        } catch (MalformedURLException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }.start();
+                showToast("操作成功");
+
+                break;
+
+            case R.id.play2:
+
+                new Thread() {
+                    @Override
+                    public void run() {
+                        try {
+                            InputStream inputStream = openFileInput("crazyit.png");
+                            bitmap = BitmapFactory.decodeStream(inputStream);
+                            inputStream.close();
+                            handler.sendEmptyMessage(0x123);
+                        } catch (MalformedURLException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }.start();
+                showToast("操作成功2");
+
                 break;
 
             default:
