@@ -15,10 +15,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.io.UTFDataFormatException;
 import java.net.Socket;
 
@@ -48,17 +51,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void run() {
                         Looper.prepare();
-                        try {
-                            Socket socket = new Socket("192.168.89.28", 30000);
-                            InputStream is = socket.getInputStream();
-                            BufferedReader br = new BufferedReader(new InputStreamReader(is));
-                            String line = br.readLine();
-                            Log.e(TAG, line);
-                            showToast(line);
+                        Socket socket = null;
+                        try
+                        {
+                            String message = ((TextView)MainActivity.this.findViewById(R.id.msg)).getText().toString();
+                            socket = new Socket("192.168.89.28", 30000);
+                            //向服务器发送消息
+                            PrintWriter out = new PrintWriter( new BufferedWriter( new OutputStreamWriter(socket.getOutputStream())),true);
+                            out.println(message);
+
+                            //接收来自服务器的消息
+                            BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                            String msg = br.readLine();
+                            showToast(msg);
+                            Log.e(TAG,msg);
+
+                            out.close();
                             br.close();
                             socket.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        }
+                        catch (Exception e)
+                        {
+                            Log.e(TAG, e.toString());
                         }
                         Looper.loop();
                     }

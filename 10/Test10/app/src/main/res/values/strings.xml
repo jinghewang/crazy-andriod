@@ -3,4 +3,6 @@
     <string name="bind">绑定Service</string>
     <string name="unbind">解除绑定</string>
     <string name="getServiceStatus">获取Service状态</string>
+    <string name="proxy_ip">192.168.89.28</string>
+    <integer name="proxy_port">30000</integer>
 </resources>
