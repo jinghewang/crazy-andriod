@@ -1,5 +1,6 @@
 package com.hbdworld.test13;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
@@ -12,28 +13,36 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends Activity implements View.OnClickListener {
 
 
     ImageView show = null;
     Bitmap bitmap;
-    String response;
+    TextView response;
     TextView textShow;
+    HttpClient httpClient;
 
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == 0x123) {
-                //show.setImageBitmap(bitmap);
-                textShow.setText(response);
+                response.append(msg.obj.toString() + "\n");
             }
         }
     };
@@ -44,9 +53,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         //--
-        show = (ImageView) this.findViewById(R.id.show);
-        textShow = (TextView) this.findViewById(R.id.text_show);
-
+        response = (TextView) this.findViewById(R.id.text_show);
+        httpClient = new DefaultHttpClient();
         //--
         bindOnClickListener(this, R.id.play, R.id.save, R.id.play2);
     }
@@ -62,11 +70,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void run() {
                         try {
-                            URL url = new URL("http://f.hiphotos.baidu.com/image/pic/item/5d6034a85edf8db12e7bfe7a0b23dd54564e7453.jpg");
-                            InputStream is = url.openStream();
-                            bitmap = BitmapFactory.decodeStream(is);
-                            handler.sendEmptyMessage(0x123);
-                            is.close();
+                            HttpGet httpGet = new HttpGet("http://192.168.89.28/t2.php");
+                            HttpResponse httpResponse = httpClient.execute(httpGet);
+                            HttpEntity httpEntity = httpResponse.getEntity();
+                            if (httpEntity!=null){
+                                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpEntity.getContent()));
+                                String line = "";
+                                while ((line =bufferedReader.readLine()) != null){
+                                    Message message = new Message();
+                                    message.what=0x123;
+                                    message.obj = line;
+                                    handler.sendMessage(message);
+                                }
+                            }
                         } catch (MalformedURLException e) {
                             e.printStackTrace();
                         } catch (IOException e) {
@@ -79,83 +95,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.save:
-
-                new Thread() {
-                    @Override
-                    public void run() {
-                        try {
-                            URL url = new URL("http://f.hiphotos.baidu.com/image/pic/item/5d6034a85edf8db12e7bfe7a0b23dd54564e7453.jpg");
-                            InputStream inputStream = url.openStream();
-                            OutputStream fos = openFileOutput("crazyit.png", MODE_APPEND);
-                            int hasRead = 0;
-                            byte[] buff = new byte[1024];
-                            while ((hasRead = inputStream.read(buff)) > 0) {
-                                fos.write(buff, 0, hasRead);
-                            }
-                            fos.close();
-                            inputStream.close();
-                        } catch (MalformedURLException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }.start();
                 showToast("操作成功");
-
                 break;
 
             case R.id.play2:
-
-                new Thread() {
-                    @Override
-                    public void run() {
-                        try {
-                            InputStream inputStream = openFileInput("crazyit.png");
-                            bitmap = BitmapFactory.decodeStream(inputStream);
-                            inputStream.close();
-                            handler.sendEmptyMessage(0x123);
-                        } catch (MalformedURLException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }.start();
                 showToast("操作成功2");
-
-                break;
-
-            case R.id.get:
-
-                new Thread()
-                {
-                    @Override
-                    public void run()
-                    {
-                        response = GetPostUtil.sendGet(
-                                "http://192.168.1.88:8888/abc/a.jsp"
-                                , null);
-                        // 发送消息通知UI线程更新UI组件
-                        handler.sendEmptyMessage(0x123);
-                    }
-                }.start();
-
-                break;
-
-            case R.id.post:
-                new Thread()
-                {
-                    @Override
-                    public void run()
-                    {
-                        response = GetPostUtil.sendPost(
-                                "http://192.168.1.88:8888/abc/login.jsp"
-                                , "name=crazyit.org&pass=leegang");
-                    }
-                }.start();
-                // 发送消息通知UI线程更新UI组件
-                handler.sendEmptyMessage(0x123);
                 break;
 
             default:
